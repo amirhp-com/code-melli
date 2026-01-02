@@ -1,1553 +1,1900 @@
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="theme-color" content="#0a0a0f">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="کد ملی">
-    <meta name="description" content="ابزار تولید و اعتبارسنجی کد ملی ایران">
 
-    <link rel="manifest" href="manifest.json">
-    <link rel="apple-touch-icon" href="icons/icon-192.png">
-    <link rel="icon" type="image/png" href="icons/icon-192.png">
-
-    <title>کد ملی ایران | تولید و اعتبارسنجی</title>
-
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-
-    <style>
-        :root {
-            --orange-50: #fff7ed;
-            --orange-100: #ffedd5;
-            --orange-200: #fed7aa;
-            --orange-300: #fdba74;
-            --orange-400: #fb923c;
-            --orange-500: #f97316;
-            --orange-600: #ea580c;
-            --orange-700: #c2410c;
-            --orange-800: #9a3412;
-            --orange-900: #7c2d12;
-
-            --dark-50: #18181b;
-            --dark-100: #151518;
-            --dark-200: #121215;
-            --dark-300: #0f0f12;
-            --dark-400: #0c0c0f;
-            --dark-500: #0a0a0d;
-            --dark-600: #08080a;
-            --dark-700: #050507;
-            --dark-800: #030304;
-            --dark-900: #000000;
-
-            --glass-bg: rgba(255, 255, 255, 0.03);
-            --glass-border: rgba(255, 255, 255, 0.08);
-            --glass-highlight: rgba(255, 255, 255, 0.15);
-            --glass-shadow: rgba(0, 0, 0, 0.5);
-
-            --text-primary: #ffffff;
-            --text-secondary: rgba(255, 255, 255, 0.7);
-            --text-tertiary: rgba(255, 255, 255, 0.4);
-
-            --success: #22c55e;
-            --error: #ef4444;
-
-            --font-family: 'Vazirmatn', system-ui, -apple-system, sans-serif;
-            --border-radius: 20px;
-            --border-radius-lg: 28px;
-            --border-radius-sm: 12px;
-
-            --transition-fast: 0.15s ease;
-            --transition-medium: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            --transition-slow: 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        html {
-            font-size: 16px;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
-        }
-
-        body {
-            font-family: var(--font-family);
-            background: var(--dark-500);
-            color: var(--text-primary);
-            min-height: 100vh;
-            min-height: 100dvh;
-            overflow-x: hidden;
-            line-height: 1.6;
-        }
-
-        /* Animated Background */
-        .background {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            z-index: -1;
-            overflow: hidden;
-        }
-
-        .background::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background:
-                radial-gradient(ellipse 80% 50% at 20% 40%, rgba(249, 115, 22, 0.15) 0%, transparent 50%),
-                radial-gradient(ellipse 60% 40% at 80% 20%, rgba(234, 88, 12, 0.1) 0%, transparent 50%),
-                radial-gradient(ellipse 50% 60% at 40% 80%, rgba(194, 65, 12, 0.08) 0%, transparent 50%);
-            animation: backgroundPulse 15s ease-in-out infinite;
-        }
-
-        @keyframes backgroundPulse {
-            0%, 100% { transform: translate(0, 0) scale(1); opacity: 1; }
-            25% { transform: translate(2%, -2%) scale(1.02); opacity: 0.8; }
-            50% { transform: translate(-1%, 1%) scale(0.98); opacity: 1; }
-            75% { transform: translate(1%, 2%) scale(1.01); opacity: 0.9; }
-        }
-
-        /* Floating Orbs */
-        .orb {
-            position: absolute;
-            border-radius: 50%;
-            filter: blur(80px);
-            opacity: 0.5;
-            animation: float 20s ease-in-out infinite;
-        }
-
-        .orb-1 {
-            width: 400px;
-            height: 400px;
-            background: var(--orange-600);
-            top: -10%;
-            right: -10%;
-            animation-delay: 0s;
-        }
-
-        .orb-2 {
-            width: 300px;
-            height: 300px;
-            background: var(--orange-700);
-            bottom: 10%;
-            left: -5%;
-            animation-delay: -5s;
-        }
-
-        .orb-3 {
-            width: 200px;
-            height: 200px;
-            background: var(--orange-500);
-            top: 50%;
-            right: 20%;
-            animation-delay: -10s;
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translate(0, 0) rotate(0deg); }
-            25% { transform: translate(30px, -30px) rotate(5deg); }
-            50% { transform: translate(-20px, 20px) rotate(-5deg); }
-            75% { transform: translate(20px, 10px) rotate(3deg); }
-        }
-
-        /* Liquid Glass Effect */
-        .glass {
-            background: var(--glass-bg);
-            backdrop-filter: blur(40px) saturate(150%);
-            -webkit-backdrop-filter: blur(40px) saturate(150%);
-            border: 1px solid var(--glass-border);
-            border-radius: var(--border-radius-lg);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .glass::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 1px;
-            background: linear-gradient(90deg,
-                transparent 0%,
-                var(--glass-highlight) 20%,
-                var(--glass-highlight) 80%,
-                transparent 100%
-            );
-        }
-
-        .glass::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(
-                135deg,
-                rgba(255, 255, 255, 0.05) 0%,
-                transparent 50%,
-                rgba(0, 0, 0, 0.1) 100%
-            );
-            pointer-events: none;
-            border-radius: inherit;
-        }
-
-        /* Main Container */
-        .app {
-            min-height: 100vh;
-            min-height: 100dvh;
-            display: flex;
-            flex-direction: column;
-            padding: 1rem;
-            padding-bottom: env(safe-area-inset-bottom, 1rem);
-        }
-
-        /* Header */
-        .header {
-            text-align: center;
-            padding: 2rem 1rem;
-            animation: slideDown 0.6s ease-out;
-        }
-
-        @keyframes slideDown {
-            from { opacity: 0; transform: translateY(-20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .logo {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            width: 70px;
-            height: 70px;
-            background: linear-gradient(135deg, var(--orange-500) 0%, var(--orange-700) 100%);
-            border-radius: 18px;
-            margin-bottom: 1rem;
-            box-shadow:
-                0 10px 40px rgba(249, 115, 22, 0.3),
-                0 0 0 1px rgba(255, 255, 255, 0.1) inset;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .logo::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 50%;
-            background: linear-gradient(to bottom, rgba(255,255,255,0.2), transparent);
-            border-radius: 18px 18px 0 0;
-        }
-
-        .logo svg {
-            width: 36px;
-            height: 36px;
-            fill: white;
-            position: relative;
-            z-index: 1;
-        }
-
-        .header h1 {
-            font-size: 1.75rem;
-            font-weight: 800;
-            background: linear-gradient(135deg, var(--text-primary) 0%, var(--orange-300) 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            margin-bottom: 0.5rem;
-        }
-
-        .header p {
-            font-size: 0.9rem;
-            color: var(--text-secondary);
-            font-weight: 300;
-        }
-
-        /* Main Content */
-        .main {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-            max-width: 500px;
-            margin: 0 auto;
-            width: 100%;
-            animation: fadeIn 0.8s ease-out 0.2s both;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* Tabs */
-        .tabs {
-            display: flex;
-            padding: 6px;
-            gap: 6px;
-        }
-
-        .tab {
-            flex: 1;
-            padding: 14px 16px;
-            background: transparent;
-            border: none;
-            border-radius: var(--border-radius);
-            color: var(--text-secondary);
-            font-family: var(--font-family);
-            font-size: 0.95rem;
-            font-weight: 500;
-            cursor: pointer;
-            transition: var(--transition-medium);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .tab::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(135deg, var(--orange-500) 0%, var(--orange-600) 100%);
-            opacity: 0;
-            transition: var(--transition-medium);
-            border-radius: inherit;
-        }
-
-        .tab span {
-            position: relative;
-            z-index: 1;
-        }
-
-        .tab.active {
-            color: var(--text-primary);
-            box-shadow: 0 4px 20px rgba(249, 115, 22, 0.3);
-        }
-
-        .tab.active::before {
-            opacity: 1;
-        }
-
-        .tab:not(.active):hover {
-            color: var(--text-primary);
-            background: rgba(255, 255, 255, 0.05);
-        }
-
-        /* Panels */
-        .panels {
-            position: relative;
-        }
-
-        .panel {
-            display: none;
-            padding: 1.5rem;
-            animation: panelFade 0.4s ease-out;
-        }
-
-        @keyframes panelFade {
-            from { opacity: 0; transform: scale(0.98); }
-            to { opacity: 1; transform: scale(1); }
-        }
-
-        .panel.active {
-            display: block;
-        }
-
-        .panel-title {
-            font-size: 1.1rem;
-            font-weight: 600;
-            margin-bottom: 1rem;
-            color: var(--text-primary);
-        }
-
-        /* Input Group */
-        .input-group {
-            margin-bottom: 1.25rem;
-        }
-
-        .input-wrapper {
-            position: relative;
-            display: flex;
-            align-items: center;
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid var(--glass-border);
-            border-radius: var(--border-radius);
-            transition: var(--transition-medium);
-            overflow: hidden;
-        }
-
-        .input-wrapper:focus-within {
-            border-color: var(--orange-500);
-            box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.15);
-        }
-
-        .input-wrapper input {
-            flex: 1;
-            background: transparent;
-            border: none;
-            padding: 16px 20px;
-            font-family: var(--font-family);
-            font-size: 1.5rem;
-            font-weight: 600;
-            color: var(--text-primary);
-            text-align: center;
-            letter-spacing: 0.15em;
-            direction: ltr;
-        }
-
-        .input-wrapper input::placeholder {
-            color: var(--text-tertiary);
-            font-size: 1rem;
-            letter-spacing: normal;
-        }
-
-        .input-wrapper input:focus {
-            outline: none;
-        }
-
-        .input-icon {
-            position: absolute;
-            left: 16px;
-            width: 24px;
-            height: 24px;
-            color: var(--text-tertiary);
-            pointer-events: none;
-        }
-
-        /* Button */
-        .btn {
-            width: 100%;
-            padding: 16px 24px;
-            background: linear-gradient(135deg, var(--orange-500) 0%, var(--orange-600) 100%);
-            border: none;
-            border-radius: var(--border-radius);
-            color: white;
-            font-family: var(--font-family);
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: var(--transition-medium);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .btn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 50%;
-            background: linear-gradient(to bottom, rgba(255,255,255,0.15), transparent);
-            pointer-events: none;
-        }
-
-        .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 30px rgba(249, 115, 22, 0.4);
-        }
-
-        .btn:active {
-            transform: translateY(0);
-            box-shadow: 0 5px 15px rgba(249, 115, 22, 0.3);
-        }
-
-        .btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-            transform: none;
-            box-shadow: none;
-        }
-
-        /* Result Card */
-        .result {
-            margin-top: 1.25rem;
-            padding: 1.25rem;
-            background: rgba(255, 255, 255, 0.02);
-            border: 1px solid var(--glass-border);
-            border-radius: var(--border-radius);
-            display: none;
-            animation: resultShow 0.4s ease-out;
-        }
-
-        @keyframes resultShow {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .result.show {
-            display: block;
-        }
-
-        .result.success {
-            border-color: rgba(34, 197, 94, 0.3);
-            background: rgba(34, 197, 94, 0.05);
-        }
-
-        .result.error {
-            border-color: rgba(239, 68, 68, 0.3);
-            background: rgba(239, 68, 68, 0.05);
-        }
-
-        .result-header {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            margin-bottom: 1rem;
-        }
-
-        .result-icon {
-            width: 40px;
-            height: 40px;
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .result.success .result-icon {
-            background: rgba(34, 197, 94, 0.15);
-            color: var(--success);
-        }
-
-        .result.error .result-icon {
-            background: rgba(239, 68, 68, 0.15);
-            color: var(--error);
-        }
-
-        .result-icon svg {
-            width: 22px;
-            height: 22px;
-        }
-
-        .result-title {
-            font-size: 1rem;
-            font-weight: 600;
-        }
-
-        .result.success .result-title {
-            color: var(--success);
-        }
-
-        .result.error .result-title {
-            color: var(--error);
-        }
-
-        .result-details {
-            display: flex;
-            flex-direction: column;
-            gap: 0.75rem;
-        }
-
-        .result-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0.75rem 1rem;
-            background: rgba(255, 255, 255, 0.03);
-            border-radius: var(--border-radius-sm);
-        }
-
-        .result-item-label {
-            font-size: 0.85rem;
-            color: var(--text-secondary);
-        }
-
-        .result-item-value {
-            font-size: 0.95rem;
-            font-weight: 600;
-            color: var(--text-primary);
-            direction: ltr;
-        }
-
-        /* Generated Code Display */
-        .generated-code {
-            margin-top: 1rem;
-            padding: 1.5rem;
-            background: linear-gradient(135deg, rgba(249, 115, 22, 0.1) 0%, rgba(194, 65, 12, 0.05) 100%);
-            border: 1px solid rgba(249, 115, 22, 0.2);
-            border-radius: var(--border-radius);
-            text-align: center;
-            display: none;
-            animation: resultShow 0.4s ease-out;
-        }
-
-        .generated-code.show {
-            display: block;
-        }
-
-        .generated-code-label {
-            font-size: 0.85rem;
-            color: var(--text-secondary);
-            margin-bottom: 0.75rem;
-        }
-
-        .generated-code-value {
-            font-size: 2rem;
-            font-weight: 800;
-            color: var(--orange-400);
-            letter-spacing: 0.2em;
-            direction: ltr;
-            font-variant-numeric: tabular-nums;
-        }
-
-        .copy-btn {
-            margin-top: 1rem;
-            padding: 10px 20px;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid var(--glass-border);
-            border-radius: var(--border-radius-sm);
-            color: var(--text-secondary);
-            font-family: var(--font-family);
-            font-size: 0.85rem;
-            cursor: pointer;
-            transition: var(--transition-fast);
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .copy-btn:hover {
-            background: rgba(255, 255, 255, 0.1);
-            color: var(--text-primary);
-        }
-
-        .copy-btn svg {
-            width: 16px;
-            height: 16px;
-        }
-
-        /* Province Select */
-        .select-wrapper {
-            position: relative;
-            margin-bottom: 1.25rem;
-        }
-
-        .select-wrapper select {
-            width: 100%;
-            padding: 14px 20px;
-            padding-left: 40px;
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid var(--glass-border);
-            border-radius: var(--border-radius);
-            color: var(--text-primary);
-            font-family: var(--font-family);
-            font-size: 0.95rem;
-            cursor: pointer;
-            appearance: none;
-            transition: var(--transition-medium);
-        }
-
-        .select-wrapper select:focus {
-            outline: none;
-            border-color: var(--orange-500);
-            box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.15);
-        }
-
-        .select-wrapper::after {
-            content: '';
-            position: absolute;
-            left: 16px;
-            top: 50%;
-            transform: translateY(-50%);
-            border: 5px solid transparent;
-            border-top: 6px solid var(--text-tertiary);
-            pointer-events: none;
-        }
-
-        .select-wrapper select option {
-            background: var(--dark-300);
-            color: var(--text-primary);
-            padding: 10px;
-        }
-
-        /* Footer */
-        .footer {
-            text-align: center;
-            padding: 1.5rem 1rem;
-            margin-top: auto;
-            animation: fadeIn 0.8s ease-out 0.4s both;
-        }
-
-        .footer-links {
-            display: flex;
-            justify-content: center;
-            gap: 1.5rem;
-            margin-bottom: 1rem;
-        }
-
-        .footer-links a {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            color: var(--text-secondary);
-            text-decoration: none;
-            font-size: 0.85rem;
-            transition: var(--transition-fast);
-        }
-
-        .footer-links a:hover {
-            color: var(--orange-400);
-        }
-
-        .footer-links svg {
-            width: 18px;
-            height: 18px;
-        }
-
-        .disclaimer {
-            margin-top: 1rem;
-            padding: 1rem;
-            background: rgba(239, 68, 68, 0.05);
-            border: 1px solid rgba(239, 68, 68, 0.15);
-            border-radius: var(--border-radius-sm);
-            max-width: 500px;
-            margin-inline: auto;
-        }
-
-        .disclaimer-title {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.5rem;
-            font-size: 0.8rem;
-            font-weight: 600;
-            color: var(--error);
-            margin-bottom: 0.5rem;
-        }
-
-        .disclaimer-title svg {
-            width: 16px;
-            height: 16px;
-        }
-
-        .disclaimer p {
-            font-size: 0.75rem;
-            color: var(--text-tertiary);
-            line-height: 1.7;
-        }
-
-        .footer-copyright {
-            margin-top: 1rem;
-            font-size: 0.75rem;
-            color: var(--text-tertiary);
-        }
-
-        /* Toast Notification */
-        .toast {
-            position: fixed;
-            bottom: 100px;
-            left: 50%;
-            transform: translateX(-50%) translateY(100px);
-            padding: 12px 24px;
-            background: var(--dark-100);
-            border: 1px solid var(--glass-border);
-            border-radius: 100px;
-            color: var(--text-primary);
-            font-size: 0.9rem;
-            opacity: 0;
-            transition: var(--transition-medium);
-            pointer-events: none;
-            z-index: 1000;
-            backdrop-filter: blur(20px);
-        }
-
-        .toast.show {
-            opacity: 1;
-            transform: translateX(-50%) translateY(0);
-        }
-
-        /* PWA Install Banner */
-        .install-banner {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            padding: 1rem;
-            padding-bottom: calc(1rem + env(safe-area-inset-bottom, 0));
-            background: var(--dark-100);
-            border-top: 1px solid var(--glass-border);
-            display: none;
-            gap: 1rem;
-            align-items: center;
-            justify-content: center;
-            z-index: 999;
-            animation: slideUp 0.4s ease-out;
-        }
-
-        @keyframes slideUp {
-            from { transform: translateY(100%); }
-            to { transform: translateY(0); }
-        }
-
-        .install-banner.show {
-            display: flex;
-        }
-
-        .install-banner p {
-            font-size: 0.9rem;
-            color: var(--text-secondary);
-        }
-
-        .install-btn {
-            padding: 10px 20px;
-            background: linear-gradient(135deg, var(--orange-500), var(--orange-600));
-            border: none;
-            border-radius: 100px;
-            color: white;
-            font-family: var(--font-family);
-            font-size: 0.85rem;
-            font-weight: 600;
-            cursor: pointer;
-            white-space: nowrap;
-        }
-
-        .dismiss-btn {
-            padding: 10px;
-            background: transparent;
-            border: none;
-            color: var(--text-tertiary);
-            cursor: pointer;
-            font-size: 1.2rem;
-        }
-
-        /* Responsive */
-        @media (max-width: 480px) {
-            .header h1 {
-                font-size: 1.5rem;
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+        <meta name="theme-color" content="#0a0a0f">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+        <meta name="apple-mobile-web-app-title" content="کد ملی">
+        <meta name="description" content="ابزار تولید و اعتبارسنجی کد ملی ایران">
+
+        <link rel="manifest" href="manifest.json">
+        <link rel="apple-touch-icon" href="icons/icon-192.png">
+        <link rel="icon" type="image/png" href="icons/icon-192.png">
+
+        <title>کد ملی ایران | تولید و اعتبارسنجی</title>
+
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+        <style>
+            :root {
+                --orange-50: #fff7ed;
+                --orange-100: #ffedd5;
+                --orange-200: #fed7aa;
+                --orange-300: #fdba74;
+                --orange-400: #fb923c;
+                --orange-500: #f97316;
+                --orange-600: #ea580c;
+                --orange-700: #c2410c;
+                --orange-800: #9a3412;
+                --orange-900: #7c2d12;
+
+                --dark-50: #18181b;
+                --dark-100: #151518;
+                --dark-200: #121215;
+                --dark-300: #0f0f12;
+                --dark-400: #0c0c0f;
+                --dark-500: #0a0a0d;
+                --dark-600: #08080a;
+                --dark-700: #050507;
+                --dark-800: #030304;
+                --dark-900: #000000;
+
+                --glass-bg: rgba(255, 255, 255, 0.03);
+                --glass-border: rgba(255, 255, 255, 0.08);
+                --glass-highlight: rgba(255, 255, 255, 0.15);
+                --glass-shadow: rgba(0, 0, 0, 0.5);
+
+                --text-primary: #ffffff;
+                --text-secondary: rgba(255, 255, 255, 0.7);
+                --text-tertiary: rgba(255, 255, 255, 0.4);
+
+                --success: #22c55e;
+                --error: #ef4444;
+
+                --font-family: 'Vazirmatn', system-ui, -apple-system, sans-serif;
+                --border-radius: 20px;
+                --border-radius-lg: 28px;
+                --border-radius-sm: 12px;
+
+                --transition-fast: 0.15s ease;
+                --transition-medium: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+                --transition-slow: 0.5s cubic-bezier(0.4, 0, 0.2, 1);
             }
 
-            .generated-code-value {
-                font-size: 1.6rem;
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
             }
 
-            .tabs {
+            html {
+                font-size: 16px;
+                -webkit-font-smoothing: antialiased;
+                -moz-osx-font-smoothing: grayscale;
+            }
+
+            body {
+                font-family: var(--font-family);
+                background: var(--dark-500);
+                color: var(--text-primary);
+                min-height: 100vh;
+                min-height: 100dvh;
+                overflow-x: hidden;
+                line-height: 1.6;
+            }
+
+            /* Animated Background */
+            .background {
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                z-index: -1;
+                overflow: hidden;
+            }
+
+            .background::before {
+                content: '';
+                position: absolute;
+                top: -50%;
+                left: -50%;
+                width: 200%;
+                height: 200%;
+                background:
+                    radial-gradient(ellipse 80% 50% at 20% 40%, rgba(249, 115, 22, 0.15) 0%, transparent 50%),
+                    radial-gradient(ellipse 60% 40% at 80% 20%, rgba(234, 88, 12, 0.1) 0%, transparent 50%),
+                    radial-gradient(ellipse 50% 60% at 40% 80%, rgba(194, 65, 12, 0.08) 0%, transparent 50%);
+                animation: backgroundPulse 15s ease-in-out infinite;
+            }
+
+            @keyframes backgroundPulse {
+
+                0%,
+                100% {
+                    transform: translate(0, 0) scale(1);
+                    opacity: 1;
+                }
+
+                25% {
+                    transform: translate(2%, -2%) scale(1.02);
+                    opacity: 0.8;
+                }
+
+                50% {
+                    transform: translate(-1%, 1%) scale(0.98);
+                    opacity: 1;
+                }
+
+                75% {
+                    transform: translate(1%, 2%) scale(1.01);
+                    opacity: 0.9;
+                }
+            }
+
+            /* Floating Orbs */
+            .orb {
+                position: absolute;
+                border-radius: 50%;
+                filter: blur(80px);
+                opacity: 0.5;
+                animation: float 20s ease-in-out infinite;
+            }
+
+            .orb-1 {
+                width: 400px;
+                height: 400px;
+                background: var(--orange-600);
+                top: -10%;
+                right: -10%;
+                animation-delay: 0s;
+            }
+
+            .orb-2 {
+                width: 300px;
+                height: 300px;
+                background: var(--orange-700);
+                bottom: 10%;
+                left: -5%;
+                animation-delay: -5s;
+            }
+
+            .orb-3 {
+                width: 200px;
+                height: 200px;
+                background: var(--orange-500);
+                top: 50%;
+                right: 20%;
+                animation-delay: -10s;
+            }
+
+            @keyframes float {
+
+                0%,
+                100% {
+                    transform: translate(0, 0) rotate(0deg);
+                }
+
+                25% {
+                    transform: translate(30px, -30px) rotate(5deg);
+                }
+
+                50% {
+                    transform: translate(-20px, 20px) rotate(-5deg);
+                }
+
+                75% {
+                    transform: translate(20px, 10px) rotate(3deg);
+                }
+            }
+
+            /* Liquid Glass Effect */
+            .glass {
+                background: var(--glass-bg);
+                backdrop-filter: blur(40px) saturate(150%);
+                -webkit-backdrop-filter: blur(40px) saturate(150%);
+                border: 1px solid var(--glass-border);
+                border-radius: var(--border-radius-lg);
+                position: relative;
+                overflow: hidden;
+            }
+
+            .glass::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                height: 1px;
+                background: linear-gradient(90deg,
+                        transparent 0%,
+                        var(--glass-highlight) 20%,
+                        var(--glass-highlight) 80%,
+                        transparent 100%);
+            }
+
+            .glass::after {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background: linear-gradient(135deg,
+                        rgba(255, 255, 255, 0.05) 0%,
+                        transparent 50%,
+                        rgba(0, 0, 0, 0.1) 100%);
+                pointer-events: none;
+                border-radius: inherit;
+            }
+
+            /* Main Container */
+            .app {
+                min-height: 100vh;
+                min-height: 100dvh;
+                display: flex;
                 flex-direction: column;
+                padding: 1rem;
+                padding-bottom: env(safe-area-inset-bottom, 1rem);
             }
 
-            .footer-links {
+            /* Header */
+            .header {
+                text-align: center;
+                padding: 2rem 1rem;
+                animation: slideDown 0.6s ease-out;
+            }
+
+            @keyframes slideDown {
+                from {
+                    opacity: 0;
+                    transform: translateY(-20px);
+                }
+
+                to {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
+            }
+
+            .logo {
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                width: 70px;
+                height: 70px;
+                background: linear-gradient(135deg, var(--orange-500) 0%, var(--orange-700) 100%);
+                border-radius: 18px;
+                margin-bottom: 1rem;
+                box-shadow:
+                    0 10px 40px rgba(249, 115, 22, 0.3),
+                    0 0 0 1px rgba(255, 255, 255, 0.1) inset;
+                position: relative;
+                overflow: hidden;
+            }
+
+            .logo::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                height: 50%;
+                background: linear-gradient(to bottom, rgba(255, 255, 255, 0.2), transparent);
+                border-radius: 18px 18px 0 0;
+            }
+
+            .logo svg {
+                width: 36px;
+                height: 36px;
+                fill: white;
+                position: relative;
+                z-index: 1;
+            }
+
+            .header h1 {
+                font-size: 1.75rem;
+                font-weight: 800;
+                background: linear-gradient(135deg, var(--text-primary) 0%, var(--orange-300) 100%);
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+                background-clip: text;
+                margin-bottom: 0.5rem;
+            }
+
+            .header p {
+                font-size: 0.9rem;
+                color: var(--text-secondary);
+                font-weight: 300;
+            }
+
+            /* Main Content */
+            .main {
+                flex: 1;
+                display: flex;
+                flex-direction: column;
+                gap: 1rem;
+                max-width: 500px;
+                margin: 0 auto;
+                width: 100%;
+                animation: fadeIn 0.8s ease-out 0.2s both;
+            }
+
+            @keyframes fadeIn {
+                from {
+                    opacity: 0;
+                    transform: translateY(20px);
+                }
+
+                to {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
+            }
+
+            /* Tabs */
+            .tabs {
+                display: flex;
+                padding: 6px;
+                gap: 6px;
+            }
+
+            .tab {
+                flex: 1;
+                padding: 14px 16px;
+                background: transparent;
+                border: none;
+                border-radius: var(--border-radius);
+                color: var(--text-secondary);
+                font-family: var(--font-family);
+                font-size: 0.95rem;
+                font-weight: 500;
+                cursor: pointer;
+                transition: var(--transition-medium);
+                position: relative;
+                overflow: hidden;
+            }
+
+            .tab::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background: linear-gradient(135deg, var(--orange-500) 0%, var(--orange-600) 100%);
+                opacity: 0;
+                transition: var(--transition-medium);
+                border-radius: inherit;
+            }
+
+            .tab span {
+                position: relative;
+                z-index: 1;
+            }
+
+            .tab.active {
+                color: var(--text-primary);
+                box-shadow: 0 4px 20px rgba(249, 115, 22, 0.3);
+            }
+
+            .tab.active::before {
+                opacity: 1;
+            }
+
+            .tab:not(.active):hover {
+                color: var(--text-primary);
+                background: rgba(255, 255, 255, 0.05);
+            }
+
+            /* Panels */
+            .panels {
+                position: relative;
+            }
+
+            .panel {
+                display: none;
+                padding: 1.5rem;
+                animation: panelFade 0.4s ease-out;
+            }
+
+            @keyframes panelFade {
+                from {
+                    opacity: 0;
+                    transform: scale(0.98);
+                }
+
+                to {
+                    opacity: 1;
+                    transform: scale(1);
+                }
+            }
+
+            .panel.active {
+                display: block;
+            }
+
+            .panel-title {
+                font-size: 1.1rem;
+                font-weight: 600;
+                margin-bottom: 1rem;
+                color: var(--text-primary);
+            }
+
+            /* Input Group */
+            .input-group {
+                margin-bottom: 1.25rem;
+            }
+
+            .input-wrapper {
+                position: relative;
+                display: flex;
+                align-items: center;
+                background: rgba(255, 255, 255, 0.03);
+                border: 1px solid var(--glass-border);
+                border-radius: var(--border-radius);
+                transition: var(--transition-medium);
+                overflow: hidden;
+            }
+
+            .input-wrapper:focus-within {
+                border-color: var(--orange-500);
+                box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.15);
+            }
+
+            .input-wrapper input {
+                flex: 1;
+                background: transparent;
+                border: none;
+                padding: 16px 20px;
+                font-family: var(--font-family);
+                font-size: 1.5rem;
+                font-weight: 600;
+                color: var(--text-primary);
+                text-align: center;
+                letter-spacing: 0.15em;
+                direction: ltr;
+            }
+
+            .input-wrapper input::placeholder {
+                color: var(--text-tertiary);
+                font-size: 1rem;
+                letter-spacing: normal;
+            }
+
+            .input-wrapper input:focus {
+                outline: none;
+            }
+
+            .input-icon {
+                position: absolute;
+                left: 16px;
+                width: 24px;
+                height: 24px;
+                color: var(--text-tertiary);
+                pointer-events: none;
+            }
+
+            /* Button */
+            .btn {
+                width: 100%;
+                padding: 16px 24px;
+                background: linear-gradient(135deg, var(--orange-500) 0%, var(--orange-600) 100%);
+                border: none;
+                border-radius: var(--border-radius);
+                color: white;
+                font-family: var(--font-family);
+                font-size: 1rem;
+                font-weight: 600;
+                cursor: pointer;
+                transition: var(--transition-medium);
+                position: relative;
+                overflow: hidden;
+            }
+
+            .btn::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                height: 50%;
+                background: linear-gradient(to bottom, rgba(255, 255, 255, 0.15), transparent);
+                pointer-events: none;
+            }
+
+            .btn:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 10px 30px rgba(249, 115, 22, 0.4);
+            }
+
+            .btn:active {
+                transform: translateY(0);
+                box-shadow: 0 5px 15px rgba(249, 115, 22, 0.3);
+            }
+
+            .btn:disabled {
+                opacity: 0.5;
+                cursor: not-allowed;
+                transform: none;
+                box-shadow: none;
+            }
+
+            /* Result Card */
+            .result {
+                margin-top: 1.25rem;
+                padding: 1.25rem;
+                background: rgba(255, 255, 255, 0.02);
+                border: 1px solid var(--glass-border);
+                border-radius: var(--border-radius);
+                display: none;
+                animation: resultShow 0.4s ease-out;
+            }
+
+            @keyframes resultShow {
+                from {
+                    opacity: 0;
+                    transform: translateY(10px);
+                }
+
+                to {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
+            }
+
+            .result.show {
+                display: block;
+            }
+
+            .result.success {
+                border-color: rgba(34, 197, 94, 0.3);
+                background: rgba(34, 197, 94, 0.05);
+            }
+
+            .result.error {
+                border-color: rgba(239, 68, 68, 0.3);
+                background: rgba(239, 68, 68, 0.05);
+            }
+
+            .result-header {
+                display: flex;
+                align-items: center;
+                gap: 0.75rem;
+                margin-bottom: 1rem;
+            }
+
+            .result-icon {
+                width: 40px;
+                height: 40px;
+                border-radius: 12px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+
+            .result.success .result-icon {
+                background: rgba(34, 197, 94, 0.15);
+                color: var(--success);
+            }
+
+            .result.error .result-icon {
+                background: rgba(239, 68, 68, 0.15);
+                color: var(--error);
+            }
+
+            .result-icon svg {
+                width: 22px;
+                height: 22px;
+            }
+
+            .result-title {
+                font-size: 1rem;
+                font-weight: 600;
+            }
+
+            .result.success .result-title {
+                color: var(--success);
+            }
+
+            .result.error .result-title {
+                color: var(--error);
+            }
+
+            .result-details {
+                display: flex;
                 flex-direction: column;
                 gap: 0.75rem;
             }
-        }
 
-        /* Dark mode scrollbar */
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-
-        ::-webkit-scrollbar-track {
-            background: var(--dark-400);
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: var(--dark-100);
-            border-radius: 4px;
-        }
-
-        ::-webkit-scrollbar-thumb:hover {
-            background: var(--orange-700);
-        }
-    </style>
-</head>
-<body>
-    <!-- Animated Background -->
-    <div class="background">
-        <div class="orb orb-1"></div>
-        <div class="orb orb-2"></div>
-        <div class="orb orb-3"></div>
-    </div>
-
-    <div class="app">
-        <!-- Header -->
-        <header class="header">
-            <div class="logo">
-                <svg viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
-                </svg>
-            </div>
-            <h1>کد ملی ایران</h1>
-            <p>تولید و اعتبارسنجی کد ملی</p>
-        </header>
-
-        <!-- Main Content -->
-        <main class="main">
-            <!-- Tabs Container -->
-            <div class="glass tabs">
-                <button class="tab active" data-tab="validate" onclick="switchTab('validate')">
-                    <span>اعتبارسنجی</span>
-                </button>
-                <button class="tab" data-tab="generate" onclick="switchTab('generate')">
-                    <span>تولید کد ملی</span>
-                </button>
-            </div>
-
-            <!-- Panels Container -->
-            <div class="glass panels">
-                <!-- Validate Panel -->
-                <div class="panel active" id="validate-panel">
-                    <h2 class="panel-title">بررسی اعتبار کد ملی</h2>
-
-                    <div class="input-group">
-                        <div class="input-wrapper">
-                            <input
-                                type="text"
-                                id="validate-input"
-                                inputmode="numeric"
-                                pattern="[0-9]*"
-                                maxlength="10"
-                                placeholder="کد ملی ۱۰ رقمی"
-                                autocomplete="off"
-                            >
-                        </div>
-                    </div>
-
-                    <button class="btn" onclick="validateNationalId()">
-                        بررسی اعتبار
-                    </button>
-
-                    <div class="result" id="validate-result">
-                        <div class="result-header">
-                            <div class="result-icon">
-                                <svg id="result-check-icon" viewBox="0 0 24 24" fill="currentColor">
-                                    <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
-                                </svg>
-                                <svg id="result-x-icon" viewBox="0 0 24 24" fill="currentColor" style="display:none;">
-                                    <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
-                                </svg>
-                            </div>
-                            <span class="result-title" id="result-status"></span>
-                        </div>
-                        <div class="result-details" id="result-details"></div>
-                    </div>
-                </div>
-
-                <!-- Generate Panel -->
-                <div class="panel" id="generate-panel">
-                    <h2 class="panel-title">تولید کد ملی تستی</h2>
-
-                    <div class="select-wrapper">
-                        <select id="province-select">
-                            <option value="">انتخاب استان (اختیاری)</option>
-                        </select>
-                    </div>
-
-                    <button class="btn" onclick="generateNationalId()">
-                        تولید کد ملی جدید
-                    </button>
-
-                    <div class="generated-code" id="generated-result">
-                        <div class="generated-code-label">کد ملی تولید شده</div>
-                        <div class="generated-code-value" id="generated-code"></div>
-                        <button class="copy-btn" onclick="copyToClipboard()">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
-                                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
-                            </svg>
-                            کپی
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </main>
-
-        <!-- Footer -->
-        <footer class="footer">
-            <div class="footer-links">
-                <a href="https://github.com/amirhp-com/code-melli" target="_blank" rel="noopener">
-                    <svg viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
-                    </svg>
-                    GitHub
-                </a>
-                <a href="https://amirhp.com/landing" target="_blank" rel="noopener">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <circle cx="12" cy="12" r="10"></circle>
-                        <path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
-                    </svg>
-                    amirhp.com
-                </a>
-            </div>
-
-            <div class="disclaimer">
-                <div class="disclaimer-title">
-                    <svg viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>
-                    </svg>
-                    سلب مسئولیت
-                </div>
-                <p>
-                    این ابزار صرفاً جهت اهداف آموزشی و تست نرم‌افزاری طراحی شده است.
-                    توسعه‌دهنده هیچگونه مسئولیتی در قبال سوءاستفاده از این ابزار ندارد.
-                    استفاده از کدهای تولید شده با مسئولیت شخصی کاربر می‌باشد.
-                </p>
-            </div>
-
-            <div class="footer-copyright">
-                ساخته شده با 🧡 برای جامعه توسعه‌دهندگان ایران
-            </div>
-        </footer>
-    </div>
-
-    <!-- Toast -->
-    <div class="toast" id="toast">کپی شد!</div>
-
-    <!-- Install Banner -->
-    <div class="install-banner" id="install-banner">
-        <p>نصب اپلیکیشن</p>
-        <button class="install-btn" onclick="installPWA()">نصب</button>
-        <button class="dismiss-btn" onclick="dismissInstall()">×</button>
-    </div>
-
-    <script>
-        // Province codes data
-        const provinceCodes = {
-            '169': { city: 'آذرشهر', province: 'آذربایجان شرقی' },
-            '170': { city: 'اسکو', province: 'آذربایجان شرقی' },
-            '149': { city: 'اهر', province: 'آذربایجان شرقی' },
-            '150': { city: 'بستان‌آباد', province: 'آذربایجان شرقی' },
-            '171': { city: 'بناب', province: 'آذربایجان شرقی' },
-            '168': { city: 'تبریز', province: 'آذربایجان شرقی' },
-            '136': { city: 'جلفا', province: 'آذربایجان شرقی' },
-            '137': { city: 'چاراویماق', province: 'آذربایجان شرقی' },
-            '138': { city: 'سراب', province: 'آذربایجان شرقی' },
-            '545': { city: 'شبستر', province: 'آذربایجان شرقی' },
-            '505': { city: 'عجب‌شیر', province: 'آذربایجان شرقی' },
-            '151': { city: 'کلیبر', province: 'آذربایجان شرقی' },
-            '152': { city: 'مراغه', province: 'آذربایجان شرقی' },
-            '153': { city: 'مرند', province: 'آذربایجان شرقی' },
-            '154': { city: 'ملکان', province: 'آذربایجان شرقی' },
-            '155': { city: 'میانه', province: 'آذربایجان شرقی' },
-            '156': { city: 'هریس', province: 'آذربایجان شرقی' },
-            '157': { city: 'هشترود', province: 'آذربایجان شرقی' },
-            '158': { city: 'ورزقان', province: 'آذربایجان شرقی' },
-
-            '400': { city: 'ارومیه', province: 'آذربایجان غربی' },
-            '401': { city: 'اشنویه', province: 'آذربایجان غربی' },
-            '402': { city: 'بوکان', province: 'آذربایجان غربی' },
-            '403': { city: 'پیرانشهر', province: 'آذربایجان غربی' },
-            '404': { city: 'تکاب', province: 'آذربایجان غربی' },
-            '405': { city: 'چالدران', province: 'آذربایجان غربی' },
-            '406': { city: 'خوی', province: 'آذربایجان غربی' },
-            '407': { city: 'سردشت', province: 'آذربایجان غربی' },
-            '408': { city: 'سلماس', province: 'آذربایجان غربی' },
-            '409': { city: 'شاهین‌دژ', province: 'آذربایجان غربی' },
-            '410': { city: 'ماکو', province: 'آذربایجان غربی' },
-            '411': { city: 'مهاباد', province: 'آذربایجان غربی' },
-            '412': { city: 'میاندوآب', province: 'آذربایجان غربی' },
-            '413': { city: 'نقده', province: 'آذربایجان غربی' },
-
-            '279': { city: 'اردبیل', province: 'اردبیل' },
-            '280': { city: 'بیله‌سوار', province: 'اردبیل' },
-            '281': { city: 'پارس‌آباد', province: 'اردبیل' },
-            '282': { city: 'خلخال', province: 'اردبیل' },
-            '283': { city: 'کوثر', province: 'اردبیل' },
-            '284': { city: 'گرمی', province: 'اردبیل' },
-            '285': { city: 'مشگین‌شهر', province: 'اردبیل' },
-            '286': { city: 'نمین', province: 'اردبیل' },
-            '287': { city: 'نیر', province: 'اردبیل' },
-
-            '001': { city: 'اصفهان', province: 'اصفهان' },
-            '002': { city: 'آران و بیدگل', province: 'اصفهان' },
-            '003': { city: 'اردستان', province: 'اصفهان' },
-            '004': { city: 'برخوار', province: 'اصفهان' },
-            '005': { city: 'تیران و کرون', province: 'اصفهان' },
-            '006': { city: 'چادگان', province: 'اصفهان' },
-            '007': { city: 'خمینی‌شهر', province: 'اصفهان' },
-            '008': { city: 'خوانسار', province: 'اصفهان' },
-            '009': { city: 'سمیرم', province: 'اصفهان' },
-            '010': { city: 'شاهین‌شهر و میمه', province: 'اصفهان' },
-            '011': { city: 'شهرضا', province: 'اصفهان' },
-            '012': { city: 'دهاقان', province: 'اصفهان' },
-            '013': { city: 'فریدن', province: 'اصفهان' },
-            '014': { city: 'فریدون‌شهر', province: 'اصفهان' },
-            '015': { city: 'فلاورجان', province: 'اصفهان' },
-            '016': { city: 'کاشان', province: 'اصفهان' },
-            '017': { city: 'گلپایگان', province: 'اصفهان' },
-            '018': { city: 'لنجان', province: 'اصفهان' },
-            '019': { city: 'مبارکه', province: 'اصفهان' },
-            '020': { city: 'نائین', province: 'اصفهان' },
-            '021': { city: 'نجف‌آباد', province: 'اصفهان' },
-            '022': { city: 'نطنز', province: 'اصفهان' },
-
-            '061': { city: 'مرکزی البرز', province: 'البرز' },
-            '062': { city: 'ساوجبلاغ', province: 'البرز' },
-            '063': { city: 'نظرآباد', province: 'البرز' },
-            '064': { city: 'کرج', province: 'البرز' },
-
-            '559': { city: 'ابوموسی', province: 'هرمزگان' },
-            '560': { city: 'بستک', province: 'هرمزگان' },
-            '561': { city: 'بندرعباس', province: 'هرمزگان' },
-            '562': { city: 'بندرلنگه', province: 'هرمزگان' },
-            '563': { city: 'جاسک', province: 'هرمزگان' },
-            '564': { city: 'حاجی‌آباد', province: 'هرمزگان' },
-            '565': { city: 'خمیر', province: 'هرمزگان' },
-            '566': { city: 'رودان', province: 'هرمزگان' },
-            '567': { city: 'قشم', province: 'هرمزگان' },
-            '568': { city: 'میناب', province: 'هرمزگان' },
-
-            '228': { city: 'ایلام', province: 'ایلام' },
-            '229': { city: 'آبدانان', province: 'ایلام' },
-            '230': { city: 'ایوان', province: 'ایلام' },
-            '231': { city: 'دره‌شهر', province: 'ایلام' },
-            '232': { city: 'دهلران', province: 'ایلام' },
-            '233': { city: 'شیروان و چرداول', province: 'ایلام' },
-            '234': { city: 'مهران', province: 'ایلام' },
-
-            '051': { city: 'بوشهر', province: 'بوشهر' },
-            '052': { city: 'تنگستان', province: 'بوشهر' },
-            '053': { city: 'جم', province: 'بوشهر' },
-            '054': { city: 'دشتستان', province: 'بوشهر' },
-            '055': { city: 'دشتی', province: 'بوشهر' },
-            '056': { city: 'دیر', province: 'بوشهر' },
-            '057': { city: 'دیلم', province: 'بوشهر' },
-            '058': { city: 'کنگان', province: 'بوشهر' },
-            '059': { city: 'گناوه', province: 'بوشهر' },
-
-            '289': { city: 'اسلامشهر', province: 'تهران' },
-            '290': { city: 'پاکدشت', province: 'تهران' },
-            '291': { city: 'تهران مرکزی', province: 'تهران' },
-            '292': { city: 'تهران جنوب', province: 'تهران' },
-            '293': { city: 'تهران شرق', province: 'تهران' },
-            '294': { city: 'تهران شمال', province: 'تهران' },
-            '295': { city: 'تهران غرب', province: 'تهران' },
-            '296': { city: 'ری', province: 'تهران' },
-            '297': { city: 'شمیرانات', province: 'تهران' },
-            '298': { city: 'شهریار', province: 'تهران' },
-            '299': { city: 'دماوند', province: 'تهران' },
-            '300': { city: 'فیروزکوه', province: 'تهران' },
-            '301': { city: 'ورامین', province: 'تهران' },
-
-            '213': { city: 'شهرکرد', province: 'چهارمحال و بختیاری' },
-            '214': { city: 'اردل', province: 'چهارمحال و بختیاری' },
-            '215': { city: 'بروجن', province: 'چهارمحال و بختیاری' },
-            '216': { city: 'فارسان', province: 'چهارمحال و بختیاری' },
-            '217': { city: 'کوهرنگ', province: 'چهارمحال و بختیاری' },
-            '218': { city: 'لردگان', province: 'چهارمحال و بختیاری' },
-
-            '235': { city: 'بیرجند', province: 'خراسان جنوبی' },
-            '236': { city: 'درمیان', province: 'خراسان جنوبی' },
-            '237': { city: 'سرایان', province: 'خراسان جنوبی' },
-            '238': { city: 'سربیشه', province: 'خراسان جنوبی' },
-            '239': { city: 'فردوس', province: 'خراسان جنوبی' },
-            '240': { city: 'قائنات', province: 'خراسان جنوبی' },
-            '241': { city: 'نهبندان', province: 'خراسان جنوبی' },
-
-            '500': { city: 'مشهد', province: 'خراسان رضوی' },
-            '501': { city: 'بجستان', province: 'خراسان رضوی' },
-            '502': { city: 'بردسکن', province: 'خراسان رضوی' },
-            '503': { city: 'تایباد', province: 'خراسان رضوی' },
-            '504': { city: 'تربت جام', province: 'خراسان رضوی' },
-            '506': { city: 'تربت حیدریه', province: 'خراسان رضوی' },
-            '507': { city: 'چناران', province: 'خراسان رضوی' },
-            '508': { city: 'خلیل‌آباد', province: 'خراسان رضوی' },
-            '509': { city: 'خواف', province: 'خراسان رضوی' },
-            '510': { city: 'درگز', province: 'خراسان رضوی' },
-            '511': { city: 'رشتخوار', province: 'خراسان رضوی' },
-            '512': { city: 'زاوه', province: 'خراسان رضوی' },
-            '513': { city: 'سبزوار', province: 'خراسان رضوی' },
-            '514': { city: 'سرخس', province: 'خراسان رضوی' },
-            '515': { city: 'فریمان', province: 'خراسان رضوی' },
-            '516': { city: 'قوچان', province: 'خراسان رضوی' },
-            '517': { city: 'کاشمر', province: 'خراسان رضوی' },
-            '518': { city: 'کلات', province: 'خراسان رضوی' },
-            '519': { city: 'گناباد', province: 'خراسان رضوی' },
-            '520': { city: 'مه‌ولات', province: 'خراسان رضوی' },
-            '521': { city: 'نیشابور', province: 'خراسان رضوی' },
-
-            '419': { city: 'بجنورد', province: 'خراسان شمالی' },
-            '420': { city: 'اسفراین', province: 'خراسان شمالی' },
-            '421': { city: 'جاجرم', province: 'خراسان شمالی' },
-            '422': { city: 'شیروان', province: 'خراسان شمالی' },
-            '423': { city: 'فاروج', province: 'خراسان شمالی' },
-            '424': { city: 'مانه و سملقان', province: 'خراسان شمالی' },
-
-            '380': { city: 'آبادان', province: 'خوزستان' },
-            '381': { city: 'امیدیه', province: 'خوزستان' },
-            '382': { city: 'اندیمشک', province: 'خوزستان' },
-            '383': { city: 'اهواز', province: 'خوزستان' },
-            '384': { city: 'ایذه', province: 'خوزستان' },
-            '385': { city: 'باغ‌ملک', province: 'خوزستان' },
-            '386': { city: 'بندرماهشهر', province: 'خوزستان' },
-            '387': { city: 'بهبهان', province: 'خوزستان' },
-            '388': { city: 'خرمشهر', province: 'خوزستان' },
-            '389': { city: 'دزفول', province: 'خوزستان' },
-            '390': { city: 'دشت‌آزادگان', province: 'خوزستان' },
-            '391': { city: 'رامهرمز', province: 'خوزستان' },
-            '392': { city: 'رامشیر', province: 'خوزستان' },
-            '393': { city: 'شادگان', province: 'خوزستان' },
-            '394': { city: 'شوش', province: 'خوزستان' },
-            '395': { city: 'شوشتر', province: 'خوزستان' },
-            '396': { city: 'گتوند', province: 'خوزستان' },
-            '397': { city: 'لالی', province: 'خوزستان' },
-            '398': { city: 'مسجدسلیمان', province: 'خوزستان' },
-            '399': { city: 'هندیجان', province: 'خوزستان' },
-
-            '440': { city: 'زنجان', province: 'زنجان' },
-            '441': { city: 'ابهر', province: 'زنجان' },
-            '442': { city: 'ایجرود', province: 'زنجان' },
-            '443': { city: 'خدابنده', province: 'زنجان' },
-            '444': { city: 'خرمدره', province: 'زنجان' },
-            '445': { city: 'طارم', province: 'زنجان' },
-            '446': { city: 'ماه‌نشان', province: 'زنجان' },
-
-            '336': { city: 'سمنان', province: 'سمنان' },
-            '337': { city: 'دامغان', province: 'سمنان' },
-            '338': { city: 'شاهرود', province: 'سمنان' },
-            '339': { city: 'گرمسار', province: 'سمنان' },
-            '340': { city: 'مهدیشهر', province: 'سمنان' },
-            '341': { city: 'میامی', province: 'سمنان' },
-
-            '450': { city: 'زاهدان', province: 'سیستان و بلوچستان' },
-            '451': { city: 'ایرانشهر', province: 'سیستان و بلوچستان' },
-            '452': { city: 'چابهار', province: 'سیستان و بلوچستان' },
-            '453': { city: 'خاش', province: 'سیستان و بلوچستان' },
-            '454': { city: 'دلگان', province: 'سیستان و بلوچستان' },
-            '455': { city: 'زابل', province: 'سیستان و بلوچستان' },
-            '456': { city: 'زهک', province: 'سیستان و بلوچستان' },
-            '457': { city: 'سراوان', province: 'سیستان و بلوچستان' },
-            '458': { city: 'سرباز', province: 'سیستان و بلوچستان' },
-            '459': { city: 'کنارک', province: 'سیستان و بلوچستان' },
-            '460': { city: 'نیکشهر', province: 'سیستان و بلوچستان' },
-
-            '070': { city: 'شیراز', province: 'فارس' },
-            '071': { city: 'آباده', province: 'فارس' },
-            '072': { city: 'ارسنجان', province: 'فارس' },
-            '073': { city: 'استهبان', province: 'فارس' },
-            '074': { city: 'اقلید', province: 'فارس' },
-            '075': { city: 'بوانات', province: 'فارس' },
-            '076': { city: 'پاسارگاد', province: 'فارس' },
-            '077': { city: 'جهرم', province: 'فارس' },
-            '078': { city: 'خرامه', province: 'فارس' },
-            '079': { city: 'خرم‌بید', province: 'فارس' },
-            '080': { city: 'داراب', province: 'فارس' },
-            '081': { city: 'زرین‌دشت', province: 'فارس' },
-            '082': { city: 'سپیدان', province: 'فارس' },
-            '083': { city: 'سروستان', province: 'فارس' },
-            '084': { city: 'فراشبند', province: 'فارس' },
-            '085': { city: 'فسا', province: 'فارس' },
-            '086': { city: 'فیروزآباد', province: 'فارس' },
-            '087': { city: 'قیروکارزین', province: 'فارس' },
-            '088': { city: 'کازرون', province: 'فارس' },
-            '089': { city: 'لار', province: 'فارس' },
-            '090': { city: 'لامرد', province: 'فارس' },
-            '091': { city: 'مرودشت', province: 'فارس' },
-            '092': { city: 'ممسنی', province: 'فارس' },
-            '093': { city: 'مهر', province: 'فارس' },
-            '094': { city: 'نی‌ریز', province: 'فارس' },
-
-            '358': { city: 'قزوین', province: 'قزوین' },
-            '359': { city: 'آبیک', province: 'قزوین' },
-            '360': { city: 'البرز', province: 'قزوین' },
-            '361': { city: 'بوئین‌زهرا', province: 'قزوین' },
-            '362': { city: 'تاکستان', province: 'قزوین' },
-
-            '365': { city: 'قم', province: 'قم' },
-
-            '430': { city: 'سنندج', province: 'کردستان' },
-            '431': { city: 'بانه', province: 'کردستان' },
-            '432': { city: 'بیجار', province: 'کردستان' },
-            '433': { city: 'دیواندره', province: 'کردستان' },
-            '434': { city: 'سروآباد', province: 'کردستان' },
-            '435': { city: 'سقز', province: 'کردستان' },
-            '436': { city: 'قروه', province: 'کردستان' },
-            '437': { city: 'کامیاران', province: 'کردستان' },
-            '438': { city: 'مریوان', province: 'کردستان' },
-
-            '469': { city: 'کرمان', province: 'کرمان' },
-            '470': { city: 'انار', province: 'کرمان' },
-            '471': { city: 'بافت', province: 'کرمان' },
-            '472': { city: 'بردسیر', province: 'کرمان' },
-            '473': { city: 'بم', province: 'کرمان' },
-            '474': { city: 'جیرفت', province: 'کرمان' },
-            '475': { city: 'رفسنجان', province: 'کرمان' },
-            '476': { city: 'رودبارجنوب', province: 'کرمان' },
-            '477': { city: 'ریگان', province: 'کرمان' },
-            '478': { city: 'زرند', province: 'کرمان' },
-            '479': { city: 'سیرجان', province: 'کرمان' },
-            '480': { city: 'شهربابک', province: 'کرمان' },
-            '481': { city: 'عنبرآباد', province: 'کرمان' },
-            '482': { city: 'فهرج', province: 'کرمان' },
-            '483': { city: 'قلعه‌گنج', province: 'کرمان' },
-            '484': { city: 'کوهبنان', province: 'کرمان' },
-            '485': { city: 'کهنوج', province: 'کرمان' },
-            '486': { city: 'منوجان', province: 'کرمان' },
-            '487': { city: 'راور', province: 'کرمان' },
-
-            '530': { city: 'کرمانشاه', province: 'کرمانشاه' },
-            '531': { city: 'اسلام‌آباد غرب', province: 'کرمانشاه' },
-            '532': { city: 'پاوه', province: 'کرمانشاه' },
-            '533': { city: 'جوانرود', province: 'کرمانشاه' },
-            '534': { city: 'دالاهو', province: 'کرمانشاه' },
-            '535': { city: 'روانسر', province: 'کرمانشاه' },
-            '536': { city: 'سرپل‌ذهاب', province: 'کرمانشاه' },
-            '537': { city: 'سنقر', province: 'کرمانشاه' },
-            '538': { city: 'صحنه', province: 'کرمانشاه' },
-            '539': { city: 'قصرشیرین', province: 'کرمانشاه' },
-            '540': { city: 'کنگاور', province: 'کرمانشاه' },
-            '541': { city: 'گیلان‌غرب', province: 'کرمانشاه' },
-            '542': { city: 'هرسین', province: 'کرمانشاه' },
-
-            '350': { city: 'یاسوج', province: 'کهگیلویه و بویراحمد' },
-            '351': { city: 'باشت', province: 'کهگیلویه و بویراحمد' },
-            '352': { city: 'بهمئی', province: 'کهگیلویه و بویراحمد' },
-            '353': { city: 'دنا', province: 'کهگیلویه و بویراحمد' },
-            '354': { city: 'کهگیلویه', province: 'کهگیلویه و بویراحمد' },
-            '355': { city: 'گچساران', province: 'کهگیلویه و بویراحمد' },
-
-            '315': { city: 'گرگان', province: 'گلستان' },
-            '316': { city: 'آزادشهر', province: 'گلستان' },
-            '317': { city: 'آق‌قلا', province: 'گلستان' },
-            '318': { city: 'بندرگز', province: 'گلستان' },
-            '319': { city: 'ترکمن', province: 'گلستان' },
-            '320': { city: 'رامیان', province: 'گلستان' },
-            '321': { city: 'علی‌آباد', province: 'گلستان' },
-            '322': { city: 'کردکوی', province: 'گلستان' },
-            '323': { city: 'کلاله', province: 'گلستان' },
-            '324': { city: 'گمیشان', province: 'گلستان' },
-            '325': { city: 'گنبدکاووس', province: 'گلستان' },
-            '326': { city: 'مراوه‌تپه', province: 'گلستان' },
-            '327': { city: 'مینودشت', province: 'گلستان' },
-
-            '180': { city: 'رشت', province: 'گیلان' },
-            '181': { city: 'آستارا', province: 'گیلان' },
-            '182': { city: 'آستانه اشرفیه', province: 'گیلان' },
-            '183': { city: 'املش', province: 'گیلان' },
-            '184': { city: 'بندرانزلی', province: 'گیلان' },
-            '185': { city: 'رضوانشهر', province: 'گیلان' },
-            '186': { city: 'رودبار', province: 'گیلان' },
-            '187': { city: 'رودسر', province: 'گیلان' },
-            '188': { city: 'سیاهکل', province: 'گیلان' },
-            '189': { city: 'شفت', province: 'گیلان' },
-            '190': { city: 'صومعه‌سرا', province: 'گیلان' },
-            '191': { city: 'طوالش', province: 'گیلان' },
-            '192': { city: 'فومن', province: 'گیلان' },
-            '193': { city: 'لاهیجان', province: 'گیلان' },
-            '194': { city: 'لنگرود', province: 'گیلان' },
-            '195': { city: 'ماسال', province: 'گیلان' },
-
-            '257': { city: 'خرم‌آباد', province: 'لرستان' },
-            '258': { city: 'ازنا', province: 'لرستان' },
-            '259': { city: 'الیگودرز', province: 'لرستان' },
-            '260': { city: 'بروجرد', province: 'لرستان' },
-            '261': { city: 'پل‌دختر', province: 'لرستان' },
-            '262': { city: 'دورود', province: 'لرستان' },
-            '263': { city: 'دلفان', province: 'لرستان' },
-            '264': { city: 'سلسله', province: 'لرستان' },
-            '265': { city: 'کوهدشت', province: 'لرستان' },
-
-            '202': { city: 'ساری', province: 'مازندران' },
-            '203': { city: 'آمل', province: 'مازندران' },
-            '204': { city: 'بابل', province: 'مازندران' },
-            '205': { city: 'بابلسر', province: 'مازندران' },
-            '206': { city: 'بهشهر', province: 'مازندران' },
-            '207': { city: 'تنکابن', province: 'مازندران' },
-            '208': { city: 'جویبار', province: 'مازندران' },
-            '209': { city: 'چالوس', province: 'مازندران' },
-            '210': { city: 'رامسر', province: 'مازندران' },
-            '211': { city: 'سوادکوه', province: 'مازندران' },
-            '212': { city: 'فریدون‌کنار', province: 'مازندران' },
-            '219': { city: 'قائم‌شهر', province: 'مازندران' },
-            '220': { city: 'گلوگاه', province: 'مازندران' },
-            '221': { city: 'محمودآباد', province: 'مازندران' },
-            '222': { city: 'میاندورود', province: 'مازندران' },
-            '223': { city: 'نکا', province: 'مازندران' },
-            '224': { city: 'نور', province: 'مازندران' },
-            '225': { city: 'نوشهر', province: 'مازندران' },
-
-            '242': { city: 'اراک', province: 'مرکزی' },
-            '243': { city: 'آشتیان', province: 'مرکزی' },
-            '244': { city: 'تفرش', province: 'مرکزی' },
-            '245': { city: 'خمین', province: 'مرکزی' },
-            '246': { city: 'دلیجان', province: 'مرکزی' },
-            '247': { city: 'زرندیه', province: 'مرکزی' },
-            '248': { city: 'ساوه', province: 'مرکزی' },
-            '249': { city: 'شازند', province: 'مرکزی' },
-            '250': { city: 'کمیجان', province: 'مرکزی' },
-            '251': { city: 'محلات', province: 'مرکزی' },
-
-            '580': { city: 'بندرعباس', province: 'هرمزگان' },
-            '581': { city: 'ابوموسی', province: 'هرمزگان' },
-            '582': { city: 'بستک', province: 'هرمزگان' },
-            '583': { city: 'بندرلنگه', province: 'هرمزگان' },
-            '584': { city: 'پارسیان', province: 'هرمزگان' },
-            '585': { city: 'جاسک', province: 'هرمزگان' },
-            '586': { city: 'حاجی‌آباد', province: 'هرمزگان' },
-            '587': { city: 'خمیر', province: 'هرمزگان' },
-            '588': { city: 'رودان', province: 'هرمزگان' },
-            '589': { city: 'قشم', province: 'هرمزگان' },
-            '590': { city: 'میناب', province: 'هرمزگان' },
-
-            '267': { city: 'همدان', province: 'همدان' },
-            '268': { city: 'اسدآباد', province: 'همدان' },
-            '269': { city: 'بهار', province: 'همدان' },
-            '270': { city: 'تویسرکان', province: 'همدان' },
-            '271': { city: 'رزن', province: 'همدان' },
-            '272': { city: 'کبودرآهنگ', province: 'همدان' },
-            '273': { city: 'ملایر', province: 'همدان' },
-            '274': { city: 'نهاوند', province: 'همدان' },
-
-            '600': { city: 'یزد', province: 'یزد' },
-            '601': { city: 'ابرکوه', province: 'یزد' },
-            '602': { city: 'اردکان', province: 'یزد' },
-            '603': { city: 'بافق', province: 'یزد' },
-            '604': { city: 'تفت', province: 'یزد' },
-            '605': { city: 'خاتم', province: 'یزد' },
-            '606': { city: 'صدوق', province: 'یزد' },
-            '607': { city: 'طبس', province: 'یزد' },
-            '608': { city: 'مهریز', province: 'یزد' },
-            '609': { city: 'میبد', province: 'یزد' }
-        };
-
-        // Group provinces for select dropdown
-        const provinces = {};
-        for (const [code, data] of Object.entries(provinceCodes)) {
-            if (!provinces[data.province]) {
-                provinces[data.province] = [];
+            .result-item {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: 0.75rem 1rem;
+                background: rgba(255, 255, 255, 0.03);
+                border-radius: var(--border-radius-sm);
             }
-            provinces[data.province].push({ code, city: data.city });
-        }
 
-        // Initialize province select
-        function initProvinceSelect() {
-            const select = document.getElementById('province-select');
+            .result-item-label {
+                font-size: 0.85rem;
+                color: var(--text-secondary);
+            }
 
-            for (const [province, cities] of Object.entries(provinces).sort()) {
-                const optgroup = document.createElement('optgroup');
-                optgroup.label = province;
+            .result-item-value {
+                font-size: 0.95rem;
+                font-weight: 600;
+                color: var(--text-primary);
+                direction: ltr;
+            }
 
-                for (const city of cities.sort((a, b) => a.city.localeCompare(b.city, 'fa'))) {
-                    const option = document.createElement('option');
-                    option.value = city.code;
-                    option.textContent = `${city.city} (${city.code})`;
-                    optgroup.appendChild(option);
+            /* Generated Code Display */
+            .generated-code {
+                margin-top: 1rem;
+                padding: 1.5rem;
+                background: linear-gradient(135deg, rgba(249, 115, 22, 0.1) 0%, rgba(194, 65, 12, 0.05) 100%);
+                border: 1px solid rgba(249, 115, 22, 0.2);
+                border-radius: var(--border-radius);
+                text-align: center;
+                display: none;
+                animation: resultShow 0.4s ease-out;
+            }
+
+            .generated-code.show {
+                display: block;
+            }
+
+            .generated-code-label {
+                font-size: 0.85rem;
+                color: var(--text-secondary);
+                margin-bottom: 0.75rem;
+            }
+
+            .generated-code-value {
+                font-size: 2rem;
+                font-weight: 800;
+                color: var(--orange-400);
+                letter-spacing: 0.2em;
+                direction: ltr;
+                font-variant-numeric: tabular-nums;
+            }
+
+            .copy-btn {
+                margin-top: 1rem;
+                padding: 10px 20px;
+                background: rgba(255, 255, 255, 0.05);
+                border: 1px solid var(--glass-border);
+                border-radius: var(--border-radius-sm);
+                color: var(--text-secondary);
+                font-family: var(--font-family);
+                font-size: 0.85rem;
+                cursor: pointer;
+                transition: var(--transition-fast);
+                display: inline-flex;
+                align-items: center;
+                gap: 0.5rem;
+            }
+
+            .copy-btn:hover {
+                background: rgba(255, 255, 255, 0.1);
+                color: var(--text-primary);
+            }
+
+            .copy-btn svg {
+                width: 16px;
+                height: 16px;
+            }
+
+            /* Province Select */
+            .select-wrapper {
+                position: relative;
+                margin-bottom: 1.25rem;
+            }
+
+            .select-wrapper select {
+                width: 100%;
+                padding: 14px 20px;
+                padding-left: 40px;
+                background: rgba(255, 255, 255, 0.03);
+                border: 1px solid var(--glass-border);
+                border-radius: var(--border-radius);
+                color: var(--text-primary);
+                font-family: var(--font-family);
+                font-size: 0.95rem;
+                cursor: pointer;
+                appearance: none;
+                transition: var(--transition-medium);
+            }
+
+            .select-wrapper select:focus {
+                outline: none;
+                border-color: var(--orange-500);
+                box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.15);
+            }
+
+            .select-wrapper::after {
+                content: '';
+                position: absolute;
+                left: 16px;
+                top: 50%;
+                transform: translateY(-50%);
+                border: 5px solid transparent;
+                border-top: 6px solid var(--text-tertiary);
+                pointer-events: none;
+            }
+
+            .select-wrapper select option {
+                background: var(--dark-300);
+                color: var(--text-primary);
+                padding: 10px;
+            }
+
+            /* Footer */
+            .footer {
+                text-align: center;
+                padding: 1.5rem 1rem;
+                margin-top: auto;
+                animation: fadeIn 0.8s ease-out 0.4s both;
+            }
+
+            .footer-links {
+                display: flex;
+                justify-content: center;
+                gap: 1.5rem;
+                margin-bottom: 1rem;
+            }
+
+            .footer-links a {
+                display: flex;
+                align-items: center;
+                gap: 0.5rem;
+                color: var(--text-secondary);
+                text-decoration: none;
+                font-size: 0.85rem;
+                transition: var(--transition-fast);
+            }
+
+            .footer-links a:hover {
+                color: var(--orange-400);
+            }
+
+            .footer-links svg {
+                width: 18px;
+                height: 18px;
+            }
+
+            .disclaimer {
+                margin-top: 1rem;
+                padding: 1rem;
+                background: rgba(239, 68, 68, 0.05);
+                border: 1px solid rgba(239, 68, 68, 0.15);
+                border-radius: var(--border-radius-sm);
+                max-width: 500px;
+                margin-inline: auto;
+            }
+
+            .disclaimer-title {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 0.5rem;
+                font-size: 0.8rem;
+                font-weight: 600;
+                color: var(--error);
+                margin-bottom: 0.5rem;
+            }
+
+            .disclaimer-title svg {
+                width: 16px;
+                height: 16px;
+            }
+
+            .disclaimer p {
+                font-size: 0.75rem;
+                color: var(--text-tertiary);
+                line-height: 1.7;
+            }
+
+            .footer-copyright {
+                margin-top: 1rem;
+                font-size: 0.75rem;
+                color: var(--text-tertiary);
+            }
+
+            /* Toast Notification */
+            .toast {
+                position: fixed;
+                bottom: 100px;
+                left: 50%;
+                transform: translateX(-50%) translateY(100px);
+                padding: 12px 24px;
+                background: var(--dark-100);
+                border: 1px solid var(--glass-border);
+                border-radius: 100px;
+                color: var(--text-primary);
+                font-size: 0.9rem;
+                opacity: 0;
+                transition: var(--transition-medium);
+                pointer-events: none;
+                z-index: 1000;
+                backdrop-filter: blur(20px);
+            }
+
+            .toast.show {
+                opacity: 1;
+                transform: translateX(-50%) translateY(0);
+            }
+
+            /* PWA Install Banner */
+            .install-banner {
+                position: fixed;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                padding: 1rem;
+                padding-bottom: calc(1rem + env(safe-area-inset-bottom, 0));
+                background: var(--dark-100);
+                border-top: 1px solid var(--glass-border);
+                display: none;
+                gap: 1rem;
+                align-items: center;
+                justify-content: center;
+                z-index: 999;
+                animation: slideUp 0.4s ease-out;
+            }
+
+            @keyframes slideUp {
+                from {
+                    transform: translateY(100%);
                 }
 
-                select.appendChild(optgroup);
-            }
-        }
-
-        // Calculate check digit
-        function calculateCheckDigit(digits) {
-            let sum = 0;
-            for (let i = 0; i < 9; i++) {
-                sum += digits[i] * (10 - i);
-            }
-            const remainder = sum % 11;
-            return remainder < 2 ? remainder : 11 - remainder;
-        }
-
-        // Validate national ID
-        function isValidNationalId(code) {
-            // Check length
-            if (code.length !== 10) return { valid: false, reason: 'کد ملی باید ۱۰ رقم باشد' };
-
-            // Check if all digits
-            if (!/^\d{10}$/.test(code)) return { valid: false, reason: 'کد ملی فقط باید شامل ارقام باشد' };
-
-            // Check for all same digits
-            if (/^(\d)\1{9}$/.test(code)) return { valid: false, reason: 'کد ملی نامعتبر است' };
-
-            // Calculate check digit
-            const digits = code.split('').map(Number);
-            const checkDigit = calculateCheckDigit(digits);
-
-            if (checkDigit !== digits[9]) {
-                return { valid: false, reason: 'رقم کنترل صحیح نیست' };
+                to {
+                    transform: translateY(0);
+                }
             }
 
-            // Get province info
-            const provinceCode = code.substring(0, 3);
-            const provinceInfo = provinceCodes[provinceCode];
+            .install-banner.show {
+                display: flex;
+            }
 
-            return {
-                valid: true,
-                province: provinceInfo ? provinceInfo.province : 'نامشخص',
-                city: provinceInfo ? provinceInfo.city : 'نامشخص',
-                provinceCode: provinceCode
+            .install-banner p {
+                font-size: 0.9rem;
+                color: var(--text-secondary);
+            }
+
+            .install-btn {
+                padding: 10px 20px;
+                background: linear-gradient(135deg, var(--orange-500), var(--orange-600));
+                border: none;
+                border-radius: 100px;
+                color: white;
+                font-family: var(--font-family);
+                font-size: 0.85rem;
+                font-weight: 600;
+                cursor: pointer;
+                white-space: nowrap;
+            }
+
+            .dismiss-btn {
+                padding: 10px;
+                background: transparent;
+                border: none;
+                color: var(--text-tertiary);
+                cursor: pointer;
+                font-size: 1.2rem;
+            }
+
+            /* Responsive */
+            @media (max-width: 480px) {
+                .header h1 {
+                    font-size: 1.5rem;
+                }
+
+                .generated-code-value {
+                    font-size: 1.6rem;
+                }
+
+                .tabs {
+                    flex-direction: column;
+                }
+
+                .footer-links {
+                    flex-direction: column;
+                    gap: 0.75rem;
+                }
+            }
+
+            /* Dark mode scrollbar */
+            ::-webkit-scrollbar {
+                width: 8px;
+            }
+
+            ::-webkit-scrollbar-track {
+                background: var(--dark-400);
+            }
+
+            ::-webkit-scrollbar-thumb {
+                background: var(--dark-100);
+                border-radius: 4px;
+            }
+
+            ::-webkit-scrollbar-thumb:hover {
+                background: var(--orange-700);
+            }
+        </style>
+    </head>
+
+    <body>
+        <!-- Animated Background -->
+        <div class="background">
+            <div class="orb orb-1"></div>
+            <div class="orb orb-2"></div>
+            <div class="orb orb-3"></div>
+        </div>
+
+        <div class="app">
+            <!-- Header -->
+            <header class="header">
+                <div class="logo">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" />
+                    </svg>
+                </div>
+                <h1>کد ملی ایران</h1>
+                <p>تولید و اعتبارسنجی کد ملی</p>
+            </header>
+
+            <!-- Main Content -->
+            <main class="main">
+                <!-- Tabs Container -->
+                <div class="glass tabs">
+                    <button class="tab active" data-tab="validate" onclick="switchTab('validate')">
+                        <span>اعتبارسنجی</span>
+                    </button>
+                    <button class="tab" data-tab="generate" onclick="switchTab('generate')">
+                        <span>تولید کد ملی</span>
+                    </button>
+                </div>
+
+                <!-- Panels Container -->
+                <div class="glass panels">
+                    <!-- Validate Panel -->
+                    <div class="panel active" id="validate-panel">
+                        <h2 class="panel-title">بررسی اعتبار کد ملی</h2>
+
+                        <div class="input-group">
+                            <div class="input-wrapper">
+                                <input type="text" id="validate-input" inputmode="numeric" pattern="[0-9]*" maxlength="10" placeholder="کد ملی ۱۰ رقمی" autocomplete="off">
+                            </div>
+                        </div>
+
+                        <button class="btn" onclick="validateNationalId()">
+                            بررسی اعتبار
+                        </button>
+
+                        <div class="result" id="validate-result">
+                            <div class="result-header">
+                                <div class="result-icon">
+                                    <svg id="result-check-icon" viewBox="0 0 24 24" fill="currentColor">
+                                        <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" />
+                                    </svg>
+                                    <svg id="result-x-icon" viewBox="0 0 24 24" fill="currentColor" style="display:none;">
+                                        <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" />
+                                    </svg>
+                                </div>
+                                <span class="result-title" id="result-status"></span>
+                            </div>
+                            <div class="result-details" id="result-details"></div>
+                        </div>
+                    </div>
+
+                    <!-- Generate Panel -->
+                    <div class="panel" id="generate-panel">
+                        <h2 class="panel-title">تولید کد ملی تستی</h2>
+
+                        <div class="select-wrapper">
+                            <select id="province-select">
+                                <option value="">انتخاب استان (اختیاری)</option>
+                            </select>
+                        </div>
+
+                        <button class="btn" onclick="generateNationalId()">
+                            تولید کد ملی جدید
+                        </button>
+
+                        <div class="generated-code" id="generated-result">
+                            <div class="generated-code-label">کد ملی تولید شده</div>
+                            <div class="generated-code-value" id="generated-code"></div>
+                            <button class="copy-btn" onclick="copyToClipboard()">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                                </svg>
+                                کپی
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </main>
+
+            <!-- Footer -->
+            <footer class="footer">
+                <div class="footer-links">
+                    <a href="https://github.com/amirhp-com/code-melli" target="_blank" rel="noopener">
+                        <svg viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" />
+                        </svg>
+                        GitHub
+                    </a>
+                    <a href="https://amirhp.com/landing" target="_blank" rel="noopener">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+                        </svg>
+                        amirhp.com
+                    </a>
+                </div>
+
+                <div class="disclaimer">
+                    <div class="disclaimer-title">
+                        <svg viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z" />
+                        </svg>
+                        سلب مسئولیت
+                    </div>
+                    <p>
+                        این ابزار صرفاً جهت اهداف آموزشی و تست نرم‌افزاری طراحی شده است.
+                        توسعه‌دهنده هیچگونه مسئولیتی در قبال سوءاستفاده از این ابزار ندارد.
+                        استفاده از کدهای تولید شده با مسئولیت شخصی کاربر می‌باشد.
+                    </p>
+                </div>
+
+                <div class="footer-copyright">
+                    ساخته شده با 🧡 برای جامعه توسعه‌دهندگان ایران
+                </div>
+            </footer>
+        </div>
+
+        <!-- Toast -->
+        <div class="toast" id="toast">کپی شد!</div>
+
+        <!-- Install Banner -->
+        <div class="install-banner" id="install-banner">
+            <p>نصب اپلیکیشن</p>
+            <button class="install-btn" onclick="installPWA()">نصب</button>
+            <button class="dismiss-btn" onclick="dismissInstall()">×</button>
+        </div>
+
+        <script>
+            // Province codes data
+            const provinceCodes = {
+                // آذربایجان شرقی
+                "169": { city: "آذرشهر", province: "آذربایجان شرقی" },
+                "170": { city: "اسکو", province: "آذربایجان شرقی" },
+                "149": { city: "اهر", province: "آذربایجان شرقی" },
+                "150": { city: "اهر", province: "آذربایجان شرقی" },
+                "171": { city: "بستان آباد", province: "آذربایجان شرقی" },
+                "168": { city: "بناب", province: "آذربایجان شرقی" },
+                "136": { city: "تبریز", province: "آذربایجان شرقی" },
+                "137": { city: "تبریز", province: "آذربایجان شرقی" },
+                "138": { city: "تبریز", province: "آذربایجان شرقی" },
+                "545": { city: "ترکمانچای", province: "آذربایجان شرقی" },
+                "505": { city: "جلفا", province: "آذربایجان شرقی" },
+                "636": { city: "چاروایماق", province: "آذربایجان شرقی" },
+                "164": { city: "سراب", province: "آذربایجان شرقی" },
+                "165": { city: "سراب", province: "آذربایجان شرقی" },
+                "172": { city: "شبستر", province: "آذربایجان شرقی" },
+                "623": [
+                    { city: "صوفیان", province: "آذربایجان شرقی" },
+                    { city: "آزادشهر", province: "گلستان" }
+                ],
+                "506": { city: "عجب شیر", province: "آذربایجان شرقی" },
+                "519": { city: "کلیبر", province: "آذربایجان شرقی" },
+                "154": { city: "مراغه", province: "آذربایجان شرقی" },
+                "155": { city: "مراغه", province: "آذربایجان شرقی" },
+                "567": { city: "ورزقان", province: "آذربایجان شرقی" },
+                "173": { city: "هریس", province: "آذربایجان شرقی" },
+                "159": { city: "هشترود", province: "آذربایجان شرقی" },
+                "160": { city: "هشترود", province: "آذربایجان شرقی" },
+                "604": { city: "هوراند", province: "آذربایجان شرقی" },
+
+                // آذربایجان غربی
+                "274": { city: "ارومیه", province: "آذربایجان غربی" },
+                "275": { city: "ارومیه", province: "آذربایجان غربی" },
+                "295": { city: "اشنویه", province: "آذربایجان غربی" },
+                "637": { city: "انزل", province: "آذربایجان غربی" },
+                "292": { city: "بوکان", province: "آذربایجان غربی" },
+                "492": { city: "پلدشت", province: "آذربایجان غربی" },
+                "289": { city: "پیرانشهر", province: "آذربایجان غربی" },
+                "677": { city: "تخت سلیمان", province: "آذربایجان غربی" },
+                "294": { city: "تکاب", province: "آذربایجان غربی" },
+                "493": { city: "چایپاره", province: "آذربایجان غربی" },
+                "279": { city: "خوی", province: "آذربایجان غربی" },
+                "280": { city: "خوی", province: "آذربایجان غربی" },
+                "288": [
+                    { city: "سردشت", province: "آذربایجان غربی" },
+                    { city: "مینودشت", province: "گلستان" }
+                ],
+                "284": { city: "سلماس", province: "آذربایجان غربی" },
+                "285": { city: "سلماس", province: "آذربایجان غربی" },
+                "638": { city: "سیلوانه", province: "آذربایجان غربی" },
+                "291": { city: "سیه چشمه(چالدران)", province: "آذربایجان غربی" },
+                "640": { city: "شوط", province: "آذربایجان غربی" },
+                "293": { city: "شاهین دژ", province: "آذربایجان غربی" },
+                "675": { city: "کشاورز", province: "آذربایجان غربی" },
+                "282": { city: "ماکو", province: "آذربایجان غربی" },
+                "283": { city: "ماکو", province: "آذربایجان غربی" },
+                "286": { city: "مهاباد", province: "آذربایجان غربی" },
+                "287": { city: "مهاباد", province: "آذربایجان غربی" },
+                "296": { city: "میاندوآب", province: "آذربایجان غربی" },
+                "297": { city: "میاندوآب", province: "آذربایجان غربی" },
+                "290": { city: "نقده", province: "آذربایجان غربی" },
+
+                // همدان
+                "400": { city: "اسدآباد", province: "همدان" },
+                "401": { city: "اسدآباد", province: "همدان" },
+                "404": { city: "بهار", province: "همدان" },
+                "405": { city: "بهار", province: "همدان" },
+                "397": { city: "تویسرکان", province: "همدان" },
+                "398": { city: "رزن", province: "همدان" },
+                "399": { city: "رزن", province: "همدان" },
+                "647": { city: "شراء و پیشخوار", province: "همدان" },
+                "502": { city: "فامنین", province: "همدان" },
+                "584": { city: "قلقل رود", province: "همدان" },
+                "402": { city: "کبودرآهنگ", province: "همدان" },
+                "403": { city: "کبودرآهنگ", province: "همدان" },
+                "392": { city: "ملایر", province: "همدان" },
+                "393": { city: "ملایر", province: "همدان" },
+                "395": { city: "نهاوند", province: "همدان" },
+                "396": { city: "نهاوند", province: "همدان" },
+                "386": [
+                    { city: "همدان", province: "همدان" },
+                    { city: "کلاله", province: "گلستان" }
+                ],
+                "387": { city: "همدان", province: "همدان" },
+
+                // یزد
+                "503": { city: "ابرکوه", province: "یزد" },
+                "444": { city: "اردکان", province: "یزد" },
+                "551": { city: "اشکذر", province: "یزد" },
+                "447": { city: "بافق", province: "یزد" },
+                "561": { city: "بهاباد", province: "یزد" },
+                "445": { city: "تفت", province: "یزد" },
+                "718": { city: "دستگردان", province: "یزد" },
+                "083": { city: "طبس", province: "یزد" },
+                "446": { city: "مهریز", province: "یزد" },
+                "448": { city: "میبد", province: "یزد" },
+                "552": { city: "نیر", province: "یزد" },
+                "543": { city: "هرات و مروست", province: "یزد" },
+                "442": { city: "یزد", province: "یزد" },
+                "443": { city: "یزد", province: "یزد" },
+
+                // مرکزی
+                "051": { city: "آشتیان", province: "مرکزی" },
+                "052": { city: "اراک", province: "مرکزی" },
+                "053": { city: "اراک", province: "مرکزی" },
+                "058": { city: "تفرش", province: "مرکزی" },
+                "055": { city: "خمین", province: "مرکزی" },
+                "617": { city: "خنداب", province: "مرکزی" },
+                "057": { city: "دلیجان", province: "مرکزی" },
+                "618": { city: "زرند مرکزی", province: "مرکزی" },
+                "059": { city: "ساوه", province: "مرکزی" },
+                "060": { city: "ساوه", province: "مرکزی" },
+                "061": { city: "سربند", province: "مرکزی" },
+                "062": { city: "سربند", province: "مرکزی" },
+                "544": { city: "فراهان", province: "مرکزی" },
+                "056": { city: "محلات", province: "مرکزی" },
+                "571": { city: "وفس", province: "مرکزی" },
+                "593": [
+                    { city: "هندودر", province: "مرکزی" },
+                    { city: "عمارلو", province: "گیلان" }
+                ],
+
+                // هرمزگان
+                "667": { city: "ابوموسی", province: "هرمزگان" },
+                "348": { city: "بستک", province: "هرمزگان" },
+                "586": { city: "بشاگرد", province: "هرمزگان" },
+                "338": { city: "بندرعباس", province: "هرمزگان" },
+                "339": { city: "بندرعباس", province: "هرمزگان" },
+                "343": { city: "بندرلنگه", province: "هرمزگان" },
+                "344": { city: "بندرلنگه", province: "هرمزگان" },
+                "346": { city: "جاسک", province: "هرمزگان" },
+                "337": { city: "حاجی آباد", province: "هرمزگان" },
+                "554": { city: "خمیر", province: "هرمزگان" },
+                "469": { city: "رودان", province: "هرمزگان" },
+                "537": { city: "فین", province: "هرمزگان" },
+                "345": { city: "قشم", province: "هرمزگان" },
+                "470": { city: "گاوبندی", province: "هرمزگان" },
+                "341": { city: "میناب", province: "هرمزگان" },
+                "342": { city: "میناب", province: "هرمزگان" },
+
+                // لرستان
+                "483": [
+                    { city: "ازنا", province: "لرستان" },
+                    { city: "چالوس", province: "مازندران" }
+                ],
+                "484": { city: "ازنا", province: "لرستان" },
+                "557": { city: "اشترینان", province: "لرستان" },
+                "418": { city: "الشتر", province: "لرستان" },
+                "416": { city: "الیگودرز", province: "لرستان" },
+                "417": { city: "الیگودرز", province: "لرستان" },
+                "412": { city: "بروجرد", province: "لرستان" },
+                "413": { city: "بروجرد", province: "لرستان" },
+                "592": { city: "پاپی", province: "لرستان" },
+                "612": { city: "چغلوندی", province: "لرستان" },
+                "613": { city: "چگنی", province: "لرستان" },
+                "406": { city: "خرم آباد", province: "لرستان" },
+                "407": { city: "خرم آباد", province: "لرستان" },
+                "421": { city: "دورود", province: "لرستان" },
+                "598": { city: "رومشکان", province: "لرستان" },
+                "419": { city: "کوهدشت", province: "لرستان" },
+                "385": [
+                    { city: "ملاوی(پلدختر)", province: "لرستان" },
+                    { city: "دیواندره", province: "کردستان" }
+                ],
+                "420": { city: "نورآباد(دلفان)", province: "لرستان" },
+                "528": { city: "ویسیان", province: "لرستان" },
+
+                // مازندران
+                "213": { city: "آمل", province: "مازندران" },
+                "214": { city: "آمل", province: "مازندران" },
+                "205": { city: "بابل", province: "مازندران" },
+                "206": { city: "بابل", province: "مازندران" },
+                "498": { city: "بابل", province: "مازندران" },
+                "568": { city: "بندپی", province: "مازندران" },
+                "711": { city: "بندپی شرقی", province: "مازندران" },
+                "217": { city: "بهشهر", province: "مازندران" },
+                "218": { city: "بهشهر", province: "مازندران" },
+                "221": { city: "تنکابن", province: "مازندران" },
+                "582": { city: "جویبار", province: "مازندران" },
+                "625": { city: "چمستان", province: "مازندران" },
+                "576": { city: "چهاردانگه", province: "مازندران" },
+                "578": { city: "دودانگه", province: "مازندران" },
+                "227": { city: "رامسر", province: "مازندران" },
+                "208": { city: "ساری", province: "مازندران" },
+                "209": { city: "ساری", province: "مازندران" },
+                "225": { city: "سوادکوه", province: "مازندران" },
+                "577": { city: "شیرگاه", province: "مازندران" },
+                "712": { city: "عباس آباد", province: "مازندران" },
+                "215": { city: "قائمشهر", province: "مازندران" },
+                "216": { city: "قائمشهر", province: "مازندران" },
+                "626": { city: "کجور", province: "مازندران" },
+                "627": { city: "کلاردشت", province: "مازندران" },
+                "579": { city: "گلوگاه", province: "مازندران" },
+                "713": { city: "میاندورود", province: "مازندران" },
+                "499": { city: "نکاء", province: "مازندران" },
+                "222": { city: "نور", province: "مازندران" },
+                "219": { city: "نوشهر", province: "مازندران" },
+                "220": { city: "نوشهر", province: "مازندران" },
+                "500": { city: "هراز و محمودآباد", province: "مازندران" },
+                "501": { city: "هراز و محمودآباد", province: "مازندران" },
+
+                // گلستان
+                "497": { city: "آق قلا", province: "گلستان" },
+                "223": { city: "بندرترکمن", province: "گلستان" },
+                "689": { city: "بندرگز", province: "گلستان" },
+                "487": { city: "رامیان", province: "گلستان" },
+                "226": { city: "علی آباد", province: "گلستان" },
+                "224": { city: "کردکوی", province: "گلستان" },
+                "211": { city: "گرگان", province: "گلستان" },
+                "212": { city: "گرگان", province: "گلستان" },
+                "628": { city: "گمیشان", province: "گلستان" },
+                "202": { city: "گنبد کاووس", province: "گلستان" },
+                "203": { city: "گنبد کاووس", province: "گلستان" },
+                "531": { city: "مراوه تپه", province: "گلستان" },
+
+                // گیلان
+                "261": { city: "آستارا", province: "گیلان" },
+                "273": { city: "آستانه", province: "گیلان" },
+                "630": { city: "املش", province: "گیلان" },
+                "264": { city: "بندرانزلی", province: "گیلان" },
+                "518": { city: "خمام", province: "گیلان" },
+                "631": { city: "رحیم آباد", province: "گیلان" },
+                "258": { city: "رشت", province: "گیلان" },
+                "259": { city: "رشت", province: "گیلان" },
+                "570": { city: "رضوانشهر", province: "گیلان" },
+                "265": { city: "رودبار", province: "گیلان" },
+                "268": { city: "رودسر", province: "گیلان" },
+                "269": { city: "رودسر", province: "گیلان" },
+                "653": { city: "سنگر", province: "گیلان" },
+                "517": { city: "سیاهکل", province: "گیلان" },
+                "569": { city: "شفت", province: "گیلان" },
+                "267": { city: "صومعه سرا", province: "گیلان" },
+                "262": { city: "طالش", province: "گیلان" },
+                "263": { city: "طالش", province: "گیلان" },
+                "266": { city: "فومن", province: "گیلان" },
+                "693": { city: "کوچصفهان", province: "گیلان" },
+                "271": { city: "لاهیجان", province: "گیلان" },
+                "272": { city: "لاهیجان", province: "گیلان" },
+                "694": { city: "لشت نشاء", province: "گیلان" },
+                "270": { city: "لنگرود", province: "گیلان" },
+                "516": { city: "ماسال و شاندرمن", province: "گیلان" },
+
+                // کرمانشاه
+                "333": { city: "اسلام آباد", province: "کرمانشاه" },
+                "334": { city: "اسلام آباد", province: "کرمانشاه" },
+                "691": { city: "باینگان", province: "کرمانشاه" },
+                "322": { city: "پاوه", province: "کرمانشاه" },
+                "323": { city: "پاوه", province: "کرمانشاه" },
+                "595": { city: "ثلاث باباجانی", province: "کرمانشاه" },
+                "395": { city: "جوانرود", province: "کرمانشاه" },
+                "641": { city: "حمیل", province: "کرمانشاه" },
+                "596": { city: "روانسر", province: "کرمانشاه" },
+                "336": { city: "سرپل ذهاب", province: "کرمانشاه" },
+                "335": { city: "سنقر", province: "کرمانشاه" },
+                "496": { city: "صحنه", province: "کرمانشاه" },
+                "324": { city: "کرمانشاه", province: "کرمانشاه" },
+                "325": { city: "کرمانشاه", province: "کرمانشاه" },
+                "394": { city: "کرند", province: "کرمانشاه" },
+                "330": { city: "کنگاور", province: "کرمانشاه" },
+                "332": { city: "گیلانغرب", province: "کرمانشاه" },
+                "331": { city: "هرسین", province: "کرمانشاه" },
+                "337": { city: "قصرشیرین", province: "کرمانشاه" },
+
+                // کهکیلویه و بویراحمد
+                "687": { city: "باشت", province: "کهکیلویه و بویراحمد" },
+                "422": { city: "بویراحمد(یاسوج)", province: "کهکیلویه و بویراحمد" },
+                "423": { city: "بویراحمد(یاسوج)", province: "کهکیلویه و بویراحمد" },
+                "599": { city: "بهمنی", province: "کهکیلویه و بویراحمد" },
+                "600": { city: "چاروسا", province: "کهکیلویه و بویراحمد" },
+                "688": { city: "دروهان", province: "کهکیلویه و بویراحمد" },
+                "424": { city: "کهکیلویه(دهدشت)", province: "کهکیلویه و بویراحمد" },
+                "425": { city: "کهکیلویه(دهدشت)", province: "کهکیلویه و بویراحمد" },
+                "426": { city: "گچساران(دوگنبدان)", province: "کهکیلویه و بویراحمد" },
+                "550": { city: "لنده", province: "کهکیلویه و بویراحمد" },
+                "697": { city: "مارگون", province: "کهکیلویه و بویراحمد" },
+
+                // کردستان
+                "384": { city: "بانه", province: "کردستان" },
+                "377": { city: "بیجار", province: "کردستان" },
+                "378": { city: "بیجار", province: "کردستان" },
+                "558": { city: "دهگلان", province: "کردستان" },
+                "646": { city: "سروآباد", province: "کردستان" },
+                "375": { city: "سقز", province: "کردستان" },
+                "376": { city: "سقز", province: "کردستان" },
+                "372": { city: "سنندج", province: "کردستان" },
+                "373": { city: "سنندج", province: "کردستان" },
+                "379": { city: "قروه", province: "کردستان" },
+                "380": { city: "قروه", province: "کردستان" },
+                "383": { city: "کامیاران", province: "کردستان" },
+                "674": { city: "کرانی", province: "کردستان" },
+                "381": { city: "مریوان", province: "کردستان" },
+                "382": { city: "مریوان", province: "کردستان" },
+                "676": { city: "نمشیر", province: "کردستان" },
+
+                // کرمان
+                "722": { city: "ارزونیه", province: "کرمان" },
+                "542": { city: "انار", province: "کرمان" },
+                "312": { city: "بافت", province: "کرمان" },
+                "313": [
+                    { city: "بافت", province: "کرمان" },
+                    { city: "شهربابک", province: "کرمان" }
+                ],
+                "317": { city: "بردسیر", province: "کرمان" },
+                "310": { city: "بم", province: "کرمان" },
+                "311": { city: "بم", province: "کرمان" },
+                "302": { city: "جیرفت", province: "کرمان" },
+                "303": { city: "جیرفت", province: "کرمان" },
+                "583": { city: "رابر", province: "کرمان" },
+                "321": { city: "راور", province: "کرمان" },
+                "382": { city: "راین", province: "کرمان" },
+                "304": { city: "رفسنجان", province: "کرمان" },
+                "305": { city: "رفسنجان", province: "کرمان" },
+                "536": { city: "رودبار کهنوج", province: "کرمان" },
+                "605": { city: "ریگان", province: "کرمان" },
+                "308": { city: "زرند", province: "کرمان" },
+                "309": { city: "زرند", province: "کرمان" },
+                "306": { city: "سیرجان", province: "کرمان" },
+                "307": { city: "سیرجان", province: "کرمان" },
+                "319": { city: "شهداد", province: "کرمان" },
+                "314": { city: "شهربابک", province: "کرمان" },
+                "606": { city: "عنبرآباد", province: "کرمان" },
+                "320": { city: "فهرج", province: "کرمان" },
+                "698": { city: "قلعه گنج", province: "کرمان" },
+                "298": { city: "کرمان", province: "کرمان" },
+                "299": { city: "کرمان", province: "کرمان" },
+                "535": { city: "کوهبنان", province: "کرمان" },
+                "315": { city: "کهنوج", province: "کرمان" },
+                "316": { city: "کهنوج", province: "کرمان" },
+                "318": { city: "گلباف", province: "کرمان" },
+                "607": { city: "ماهان", province: "کرمان" },
+                "608": { city: "منوجان", province: "کرمان" },
+
+                // قزوین
+                "508": { city: "آبیک", province: "قزوین" },
+                "538": { city: "آوج", province: "قزوین" },
+                "728": { city: "البرز", province: "قزوین" },
+                "509": { city: "بوئین زهرا", province: "قزوین" },
+                "438": { city: "تاکستان", province: "قزوین" },
+                "439": { city: "تاکستان", province: "قزوین" },
+                "580": { city: "رودبار الموت", province: "قزوین" },
+                "590": { city: "رودبار شهرستان", province: "قزوین" },
+                "559": { city: "ضیاءآباد", province: "قزوین" },
+                "588": { city: "طارم سفلی", province: "قزوین" },
+                "431": { city: "قزوین", province: "قزوین" },
+                "432": { city: "قزوین", province: "قزوین" },
+
+                // قم
+                "037": { city: "قم", province: "قم" },
+                "038": { city: "قم", province: "قم" },
+                "702": { city: "کهک", province: "قم" },
+
+                // فارس
+                "240": { city: "آباده", province: "فارس" },
+                "241": { city: "آباده", province: "فارس" },
+                "670": { city: "آباده طشک", province: "فارس" },
+                "648": { city: "ارسنجان", province: "فارس" },
+                "252": { city: "استهبان", province: "فارس" },
+                "678": { city: "اشکنان", province: "فارس" },
+                "253": [
+                    { city: "اقلید", province: "فارس" },
+                    { city: "سپیدان", province: "فارس" }
+                ],
+                "649": { city: "اوز", province: "فارس" },
+                "513": { city: "بوانات", province: "فارس" },
+                "546": { city: "بیضا", province: "فارس" },
+                "671": { city: "جویم", province: "فارس" },
+                "246": { city: "جهرم", province: "فارس" },
+                "247": { city: "جهرم", province: "فارس" },
+                "654": { city: "حاجی آباد(زرین دشت)", province: "فارس" },
+                "548": { city: "خرامه", province: "فارس" },
+                "547": { city: "خشت و کمارج", province: "فارس" },
+                "655": { city: "خفر", province: "فارس" },
+                "248": { city: "داراب", province: "فارس" },
+                "249": { city: "داراب", province: "فارس" },
+                "514": { city: "سروستان", province: "فارس" },
+                "665": { city: "سعادت آباد", province: "فارس" },
+                "673": { city: "شیبکوه", province: "فارس" },
+                "228": { city: "شیراز", province: "فارس" },
+                "229": { city: "شیراز", province: "فارس" },
+                "230": { city: "شیراز", province: "فارس" },
+                "679": { city: "فراشبند", province: "فارس" },
+                "256": { city: "فسا", province: "فارس" },
+                "257": { city: "فسا", province: "فارس" },
+                "244": { city: "فیروزآباد", province: "فارس" },
+                "245": { city: "فیروزآباد", province: "فارس" },
+                "681": { city: "قنقری(خرم بید)", province: "فارس" },
+                "723": { city: "قیروکارزین", province: "فارس" },
+                "236": { city: "کازرون", province: "فارس" },
+                "237": { city: "کازرون", province: "فارس" },
+                "683": { city: "کوار", province: "فارس" },
+                "656": { city: "کراش", province: "فارس" },
+                "250": { city: "لارستان", province: "فارس" },
+                "251": { city: "لارستان", province: "فارس" },
+                "515": { city: "لامرد", province: "فارس" },
+                "242": { city: "مرودشت", province: "فارس" },
+                "243": { city: "مرودشت", province: "فارس" },
+                "238": { city: "ممسنی", province: "فارس" },
+                "239": { city: "ممسنی", province: "فارس" },
+                "657": { city: "مهر", province: "فارس" },
+                "255": { city: "نی ریز", province: "فارس" },
+
+                // سمنان
+                "684": { city: "ایوانکی", province: "سمنان" },
+                "700": { city: "بسطام", province: "سمنان" },
+                "642": { city: "بیارجمند", province: "سمنان" },
+                "457": { city: "دامغان", province: "سمنان" },
+                "456": { city: "سمنان", province: "سمنان" },
+                "458": { city: "شاهرود", province: "سمنان" },
+                "459": { city: "شاهرود", province: "سمنان" },
+                "460": { city: "گرمسار", province: "سمنان" },
+                "530": { city: "مهدیشهر", province: "سمنان" },
+                "520": { city: "میامی", province: "سمنان" },
+
+                // سیستان و بلوچستان
+                "358": { city: "ایرانشهر", province: "سیستان و بلوچستان" },
+                "359": { city: "ایرانشهر", province: "سیستان و بلوچستان" },
+                "682": { city: "بزمان", province: "سیستان و بلوچستان" },
+                "703": { city: "بمپور", province: "سیستان و بلوچستان" },
+                "364": { city: "چابهار", province: "سیستان و بلوچستان" },
+                "365": { city: "چابهار", province: "سیستان و بلوچستان" },
+                "371": { city: "خاش", province: "سیستان و بلوچستان" },
+                "701": { city: "دشتیاری", province: "سیستان و بلوچستان" },
+                "720": { city: "راسک", province: "سیستان و بلوچستان" },
+                "366": { city: "زابل", province: "سیستان و بلوچستان" },
+                "367": { city: "زابل", province: "سیستان و بلوچستان" },
+                "704": { city: "زابلی", province: "سیستان و بلوچستان" },
+                "361": { city: "زاهدان", province: "سیستان و بلوچستان" },
+                "362": { city: "زاهدان", province: "سیستان و بلوچستان" },
+                "369": { city: "سراوان", province: "سیستان و بلوچستان" },
+                "370": { city: "سراوان", province: "سیستان و بلوچستان" },
+                "635": [
+                    { city: "سرباز", province: "سیستان و بلوچستان" },
+                    { city: "فاروج", province: "خراسان شمالی" }
+                ],
+                "668": { city: "سیب و سوران", province: "سیستان و بلوچستان" },
+                "533": { city: "شهرکی و ناروئی(زهک)", province: "سیستان و بلوچستان" },
+                "705": { city: "شیب آب", province: "سیستان و بلوچستان" },
+                "699": { city: "فنوج", province: "سیستان و بلوچستان" },
+                "669": { city: "قصرقند", province: "سیستان و بلوچستان" },
+                "725": { city: "کنارک", province: "سیستان و بلوچستان" },
+                "597": { city: "لاشار(اسپکه)", province: "سیستان و بلوچستان" },
+                "611": { city: "میرجاوه", province: "سیستان و بلوچستان" },
+                "525": { city: "نیک شهر", province: "سیستان و بلوچستان" },
+
+                // خوزستان
+                "181": { city: "آبادان", province: "خوزستان" },
+                "527": { city: "آغاجاری", province: "خوزستان" },
+                "585": { city: "اروندکنار", province: "خوزستان" },
+                "685": { city: "امیدیه", province: "خوزستان" },
+                "663": { city: "اندیکا", province: "خوزستان" },
+                "192": { city: "اندیمشک", province: "خوزستان" },
+                "193": { city: "اندیمشک", province: "خوزستان" },
+                "174": { city: "اهواز", province: "خوزستان" },
+                "175": { city: "اهواز", province: "خوزستان" },
+                "183": { city: "ایذه", province: "خوزستان" },
+                "184": { city: "ایذه", province: "خوزستان" },
+                "481": { city: "باغ ملک", province: "خوزستان" },
+                "706": { city: "بندر امام خمینی", province: "خوزستان" },
+                "194": { city: "بندرماهشهر", province: "خوزستان" },
+                "195": { city: "بندرماهشهر", province: "خوزستان" },
+                "185": { city: "بهبهان", province: "خوزستان" },
+                "186": { city: "بهبهان", province: "خوزستان" },
+                "182": { city: "خرمشهر", province: "خوزستان" },
+                "199": { city: "دزفول", province: "خوزستان" },
+                "200": { city: "دزفول", province: "خوزستان" },
+                "198": { city: "دشت آزادگان", province: "خوزستان" },
+                "662": { city: "رامشیر", province: "خوزستان" },
+                "190": { city: "رامهرمز", province: "خوزستان" },
+                "191": { city: "رامهرمز", province: "خوزستان" },
+                "692": { city: "سردشت", province: "خوزستان" },
+                "189": { city: "شادگان", province: "خوزستان" },
+                "707": { city: "شاوور", province: "خوزستان" },
+                "526": { city: "شوش", province: "خوزستان" },
+                "187": { city: "شوشتر", province: "خوزستان" },
+                "188": { city: "شوشتر", province: "خوزستان" },
+                "729": { city: "گتوند", province: "خوزستان" },
+                "730": { city: "لالی", province: "خوزستان" },
+                "196": { city: "مسجدسلیمان", province: "خوزستان" },
+                "197": { city: "مسجدسلیمان", province: "خوزستان" },
+                "661": { city: "هندیجان", province: "خوزستان" },
+                "680": { city: "هویزه", province: "خوزستان" },
+
+                // خراسان رضوی
+                "643": { city: "احمدآباد", province: "خراسان رضوی" },
+                "562": { city: "بجستان", province: "خراسان رضوی" },
+                "572": { city: "بردسکن", province: "خراسان رضوی" },
+                "074": { city: "تایباد", province: "خراسان رضوی" },
+                "644": { city: "تخت جلگه", province: "خراسان رضوی" },
+                "072": { city: "تربت جام", province: "خراسان رضوی" },
+                "073": { city: "تربت جام", province: "خراسان رضوی" },
+                "069": { city: "تربت حیدریه", province: "خراسان رضوی" },
+                "070": { city: "تربت حیدریه", province: "خراسان رضوی" },
+                "521": { city: "جغتای", province: "خراسان رضوی" },
+                "573": { city: "جوین", province: "خراسان رضوی" },
+                "522": { city: "چناران", province: "خراسان رضوی" },
+                "724": { city: "خلیل آباد", province: "خراسان رضوی" },
+                "076": { city: "خواف", province: "خراسان رضوی" },
+                "077": { city: "درگز", province: "خراسان رضوی" },
+                "650": { city: "رشتخوار", province: "خراسان رضوی" },
+                "574": { city: "زبرخان", province: "خراسان رضوی" },
+                "078": { city: "سبزوار", province: "خراسان رضوی" },
+                "079": { city: "سبزوار", province: "خراسان رضوی" },
+                "081": { city: "سرخس", province: "خراسان رضوی" },
+                "084": { city: "فریمان", province: "خراسان رضوی" },
+                "651": { city: "فیض آباد", province: "خراسان رضوی" },
+                "086": { city: "قوچان", province: "خراسان رضوی" },
+                "087": { city: "قوچان", province: "خراسان رضوی" },
+                "089": { city: "کاشمر", province: "خراسان رضوی" },
+                "090": { city: "کاشمر", province: "خراسان رضوی" },
+                "553": { city: "کلات", province: "خراسان رضوی" },
+                "091": { city: "گناباد", province: "خراسان رضوی" },
+                "092": { city: "مشهد", province: "خراسان رضوی" },
+                "093": { city: "مشهد", province: "خراسان رضوی" },
+                "094": { city: "مشهد", province: "خراسان رضوی" },
+                "096": { city: "مشهد منطقه1", province: "خراسان رضوی" },
+                "097": { city: "مشهد منطقه2", province: "خراسان رضوی" },
+                "098": { city: "مشهد منطقه3", province: "خراسان رضوی" },
+                "105": { city: "نیشابور", province: "خراسان رضوی" },
+                "106": { city: "نیشابور", province: "خراسان رضوی" },
+
+                // خراسان شمالی
+                "063": { city: "اسفراین", province: "خراسان شمالی" },
+                "067": { city: "بجنورد", province: "خراسان شمالی" },
+                "068": { city: "بجنورد", province: "خراسان شمالی" },
+                "075": { city: "جاجرم", province: "خراسان شمالی" },
+                "591": { city: "رازوجرکلان", province: "خراسان شمالی" },
+                "082": { city: "شیروان", province: "خراسان شمالی" },
+                "524": { city: "مانه و سملقان", province: "خراسان شمالی" },
+
+                // چهارمحال و بختیاری
+                "468": { city: "اردل", province: "چهارمحال و بختیاری" },
+                "465": { city: "بروجن", province: "چهارمحال و بختیاری" },
+                "461": { city: "شهرکرد", province: "چهارمحال و بختیاری" },
+                "462": { city: "شهرکرد", province: "چهارمحال و بختیاری" },
+                "467": { city: "فارسان", province: "چهارمحال و بختیاری" },
+                "632": { city: "فلارد", province: "چهارمحال و بختیاری" },
+                "555": { city: "کوهرنگ", province: "چهارمحال و بختیاری" },
+                "633": { city: "کیار", province: "چهارمحال و بختیاری" },
+                "629": { city: "گندمان", province: "چهارمحال و بختیاری" },
+                "466": { city: "لردگان", province: "چهارمحال و بختیاری" },
+                "696": { city: "میانکوه", province: "چهارمحال و بختیاری" },
+
+                // خراسان جنوبی
+                "721": { city: "بشرویه", province: "خراسان جنوبی" },
+                "064": { city: "بیرجند", province: "خراسان جنوبی" },
+                "065": { city: "بیرجند", province: "خراسان جنوبی" },
+                "523": { city: "درمیان", province: "خراسان جنوبی" },
+                "652": { city: "زیرکوه", province: "خراسان جنوبی" },
+                "719": { city: "سرایان", province: "خراسان جنوبی" },
+                "716": { city: "سربیشه", province: "خراسان جنوبی" },
+                "085": { city: "فردوس", province: "خراسان جنوبی" },
+                "088": { city: "قائنات", province: "خراسان جنوبی" },
+                "563": { city: "نهبندان", province: "خراسان جنوبی" },
+
+                // بوشهر
+                "529": { city: "بندر دیلم", province: "بوشهر" },
+                "353": { city: "بندر گناوه", province: "بوشهر" },
+                "349": { city: "بوشهر", province: "بوشهر" },
+                "350": { city: "بوشهر", province: "بوشهر" },
+                "355": { city: "تنگستان", province: "بوشهر" },
+                "609": { city: "جم", province: "بوشهر" },
+                "351": { city: "دشتستان", province: "بوشهر" },
+                "352": { city: "دشتستان", province: "بوشهر" },
+                "354": { city: "دشتی", province: "بوشهر" },
+                "732": { city: "دلوار", province: "بوشهر" },
+                "357": { city: "دیر", province: "بوشهر" },
+                "532": { city: "سعد آباد", province: "بوشهر" },
+                "610": { city: "شبانکاره", province: "بوشهر" },
+                "356": { city: "کنگان", province: "بوشهر" },
+
+                // تهران
+                "556": { city: "اسلامشهر", province: "تهران" },
+                "658": { city: "پاکدشت", province: "تهران" },
+                "001": { city: "تهران مرکزی", province: "تهران" },
+                "002": { city: "تهران مرکزی", province: "تهران" },
+                "003": { city: "تهران مرکزی", province: "تهران" },
+                "004": { city: "تهران مرکزی", province: "تهران" },
+                "005": { city: "تهران مرکزی", province: "تهران" },
+                "006": { city: "تهران مرکزی", province: "تهران" },
+                "007": { city: "تهران جنوب", province: "تهران" },
+                "008": { city: "تهران جنوب", province: "تهران" },
+                "011": { city: "تهران جنوب", province: "تهران" },
+                "020": { city: "تهران شرق", province: "تهران" },
+                "025": { city: "تهرانشمال", province: "تهران" },
+                "015": { city: "تهران غرب", province: "تهران" },
+                "043": { city: "دماوند", province: "تهران" },
+                "666": { city: "رباط کریم", province: "تهران" },
+                "489": { city: "ساوجبلاغ", province: "تهران" },
+                "044": { city: "شمیران", province: "تهران" },
+                "045": { city: "شمیران", province: "تهران" },
+                "048": { city: "شهرری", province: "تهران" },
+                "049": { city: "شهرری", province: "تهران" },
+                "490": { city: "شهریار", province: "تهران" },
+                "491": { city: "شهریار", province: "تهران" },
+                "695": { city: "طالقان", province: "تهران" },
+                "659": { city: "فیروزکوه", province: "تهران" },
+                "031": { city: "کرج", province: "تهران" },
+                "032": { city: "کرج", province: "تهران" },
+                "664": { city: "کهریزک", province: "تهران" },
+                "717": { city: "نظرآباد", province: "تهران" },
+                "041": { city: "ورامین", province: "تهران" },
+                "042": { city: "ورامین", province: "تهران" },
+
+                // امور خارجه
+                "471": { city: "امور خارجه", province: "امور خارجه" },
+                "472": { city: "امور خارجه", province: "امور خارجه" },
+
+                // ایلام
+                "454": { city: "آبدانان", province: "ایلام" },
+                "581": { city: "ارکوازی(ملکشاهی)", province: "ایلام" },
+                "449": { city: "ایلام", province: "ایلام" },
+                "450": { city: "ایلام", province: "ایلام" },
+                "616": { city: "ایوان", province: "ایلام" },
+                "534": { city: "بدره", province: "ایلام" },
+                "455": { city: "دره شهر", province: "ایلام" },
+                "451": { city: "دهلران", province: "ایلام" },
+                "726": { city: "زرین آباد", province: "ایلام" },
+                "634": { city: "شیروان لومار", province: "ایلام" },
+                "453": { city: "شیروان و چرداول", province: "ایلام" },
+                "727": { city: "موسیان", province: "ایلام" },
+                "452": { city: "مهران", province: "ایلام" },
+
+                // اردبیل
+                "145": { city: "اردبیل", province: "اردبیل" },
+                "146": { city: "اردبیل", province: "اردبیل" },
+                "731": { city: "ارشق", province: "اردبیل" },
+                "690": { city: "انگوت", province: "اردبیل" },
+                "601": { city: "بیله سوار", province: "اردبیل" },
+                "504": { city: "پارس آباد", province: "اردبیل" },
+                "163": { city: "خلخال", province: "اردبیل" },
+                "714": { city: "خورش رستم", province: "اردبیل" },
+                "715": { city: "سرعین", province: "اردبیل" },
+                "566": { city: "سنجبد(کوثر)", province: "اردبیل" },
+                "166": { city: "مشکین شهر", province: "اردبیل" },
+                "167": { city: "مشکین شهر", province: "اردبیل" },
+                "161": { city: "مغان", province: "اردبیل" },
+                "162": { city: "مغان", province: "اردبیل" },
+                "686": { city: "نمین", province: "اردبیل" },
+                "603": { city: "نیر", province: "اردبیل" },
+
+                // اصفهان
+                "619": { city: "آران و بیدگل", province: "اصفهان" },
+                "118": { city: "اردستان", province: "اصفهان" },
+                "127": { city: "اصفهان", province: "اصفهان" },
+                "128": { city: "اصفهان", province: "اصفهان" },
+                "129": { city: "اصفهان", province: "اصفهان" },
+                "620": { city: "باغ بهادران", province: "اصفهان" },
+                "621": { city: "بوئین و میاندشت", province: "اصفهان" },
+                "549": { city: "تیران و کرون", province: "اصفهان" },
+                "564": { city: "جرقویه", province: "اصفهان" },
+                "575": { city: "چادگان", province: "اصفهان" },
+                "113": { city: "خمینی شهر", province: "اصفهان" },
+                "114": { city: "خمینی شهر", province: "اصفهان" },
+                "122": { city: "خوانسار", province: "اصفهان" },
+                "540": { city: "خور و بیابانک", province: "اصفهان" },
+                "660": { city: "دولت آباد", province: "اصفهان" },
+                "120": { city: "سمیرم", province: "اصفهان" },
+                "512": { city: "سمیرم سفلی (دهاقان)", province: "اصفهان" },
+                "510": { city: "شاهین شهر", province: "اصفهان" },
+                "511": { city: "شاهین شهر", province: "اصفهان" },
+                "119": { city: "شهرضا", province: "اصفهان" },
+                "115": { city: "فریدن", province: "اصفهان" },
+                "112": { city: "فریدونشهر", province: "اصفهان" },
+                "110": { city: "فلاورجان", province: "اصفهان" },
+                "111": { city: "فلاورجان", province: "اصفهان" },
+                "125": { city: "کاشان", province: "اصفهان" },
+                "126": { city: "کاشان", province: "اصفهان" },
+                "565": { city: "کوهپایه", province: "اصفهان" },
+                "121": { city: "گلپایگان", province: "اصفهان" },
+                "116": { city: "لنجان(زرینشهر)", province: "اصفهان" },
+                "117": { city: "لنجان(زرینشهر)", province: "اصفهان" },
+                "541": { city: "مبارکه", province: "اصفهان" },
+                "622": { city: "میمه", province: "اصفهان" },
+                "124": { city: "نائین", province: "اصفهان" },
+                "108": { city: "نجف آباد", province: "اصفهان" },
+                "109": { city: "نجف آباد", province: "اصفهان" },
+                "123": { city: "نطنز", province: "اصفهان" },
+
+                // زنجان (متفرقه)
+                "427": { city: "زنجان", province: "زنجان" },
+                "428": { city: "زنجان", province: "زنجان" },
+                "615": { city: "ابهر و خرمدره", province: "زنجان" },
+
+                // متفرقه طبق دیتای ارسالی
+                "507": { city: "ملکان", province: "آذربایجان شرقی" },
+                "158": { city: "مرند", province: "آذربایجان شرقی" },
+                "152": { city: "میانه", province: "آذربایجان شرقی" },
+                "153": { city: "میانه", province: "آذربایجان شرقی" }
             };
-        }
 
-        // Generate random national ID
-        function generateRandomNationalId(provinceCode = null) {
-            let code;
-
-            if (provinceCode) {
-                code = provinceCode.padStart(3, '0');
-            } else {
-                // Pick random valid province code
-                const codes = Object.keys(provinceCodes);
-                code = codes[Math.floor(Math.random() * codes.length)];
+            // Group provinces for select dropdown
+            const provinces = {};
+            for (const [code, data] of Object.entries(provinceCodes)) {
+                if (!provinces[data.province]) {
+                    provinces[data.province] = [];
+                }
+                provinces[data.province].push({ code, city: data.city });
             }
 
-            // Generate 6 random digits
-            for (let i = 0; i < 6; i++) {
-                code += Math.floor(Math.random() * 10);
+            // Initialize province select
+            function initProvinceSelect() {
+                const select = document.getElementById('province-select');
+
+                for (const [province, cities] of Object.entries(provinces).sort()) {
+                    const optgroup = document.createElement('optgroup');
+                    optgroup.label = province;
+
+                    for (const city of cities.sort((a, b) => a.city.localeCompare(b.city, 'fa'))) {
+                        const option = document.createElement('option');
+                        option.value = city.code;
+                        option.textContent = `${city.city} (${city.code})`;
+                        optgroup.appendChild(option);
+                    }
+
+                    select.appendChild(optgroup);
+                }
             }
 
             // Calculate check digit
-            const digits = code.split('').map(Number);
-            const checkDigit = calculateCheckDigit(digits);
-
-            return code + checkDigit;
-        }
-
-        // Tab switching
-        function switchTab(tabName) {
-            document.querySelectorAll('.tab').forEach(tab => {
-                tab.classList.toggle('active', tab.dataset.tab === tabName);
-            });
-
-            document.querySelectorAll('.panel').forEach(panel => {
-                panel.classList.toggle('active', panel.id === `${tabName}-panel`);
-            });
-        }
-
-        // Validate button click
-        function validateNationalId() {
-            const input = document.getElementById('validate-input');
-            const result = document.getElementById('validate-result');
-            const resultStatus = document.getElementById('result-status');
-            const resultDetails = document.getElementById('result-details');
-            const checkIcon = document.getElementById('result-check-icon');
-            const xIcon = document.getElementById('result-x-icon');
-
-            const code = input.value.replace(/\D/g, '');
-
-            if (!code) {
-                showToast('لطفاً کد ملی را وارد کنید');
-                return;
+            function calculateCheckDigit(digits) {
+                let sum = 0;
+                for (let i = 0; i < 9; i++) {
+                    sum += digits[i] * (10 - i);
+                }
+                const remainder = sum % 11;
+                return remainder < 2 ? remainder : 11 - remainder;
             }
 
-            const validation = isValidNationalId(code);
+            // Validate national ID
+            function isValidNationalId(code) {
+                // Check length
+                if (code.length !== 10) return { valid: false, reason: 'کد ملی باید ۱۰ رقم باشد' };
 
-            result.classList.remove('success', 'error');
-            result.classList.add('show');
+                // Check if all digits
+                if (!/^\d{10}$/.test(code)) return { valid: false, reason: 'کد ملی فقط باید شامل ارقام باشد' };
 
-            if (validation.valid) {
-                result.classList.add('success');
-                checkIcon.style.display = 'block';
-                xIcon.style.display = 'none';
-                resultStatus.textContent = 'کد ملی معتبر است';
+                // Check for all same digits
+                if (/^(\d)\1{9}$/.test(code)) return { valid: false, reason: 'کد ملی نامعتبر است' };
 
-                resultDetails.innerHTML = `
+                // Calculate check digit
+                const digits = code.split('').map(Number);
+                const checkDigit = calculateCheckDigit(digits);
+
+                if (checkDigit !== digits[9]) {
+                    return { valid: false, reason: 'رقم کنترل صحیح نیست' };
+                }
+
+                // Get province info
+                const provinceCode = code.substring(0, 3);
+                const provinceInfo = provinceCodes[provinceCode];
+
+                return {
+                    valid: true,
+                    province: provinceInfo ? provinceInfo.province : 'نامشخص',
+                    city: provinceInfo ? provinceInfo.city : 'نامشخص',
+                    provinceCode: provinceCode
+                };
+            }
+
+            // Generate random national ID
+            function generateRandomNationalId(provinceCode = null) {
+                let code;
+
+                if (provinceCode) {
+                    code = provinceCode.padStart(3, '0');
+                } else {
+                    // Pick random valid province code
+                    const codes = Object.keys(provinceCodes);
+                    code = codes[Math.floor(Math.random() * codes.length)];
+                }
+
+                // Generate 6 random digits
+                for (let i = 0; i < 6; i++) {
+                    code += Math.floor(Math.random() * 10);
+                }
+
+                // Calculate check digit
+                const digits = code.split('').map(Number);
+                const checkDigit = calculateCheckDigit(digits);
+
+                return code + checkDigit;
+            }
+
+            // Tab switching
+            function switchTab(tabName) {
+                document.querySelectorAll('.tab').forEach(tab => {
+                    tab.classList.toggle('active', tab.dataset.tab === tabName);
+                });
+
+                document.querySelectorAll('.panel').forEach(panel => {
+                    panel.classList.toggle('active', panel.id === `${tabName}-panel`);
+                });
+            }
+
+            // Validate button click
+            function validateNationalId() {
+                const input = document.getElementById('validate-input');
+                const result = document.getElementById('validate-result');
+                const resultStatus = document.getElementById('result-status');
+                const resultDetails = document.getElementById('result-details');
+                const checkIcon = document.getElementById('result-check-icon');
+                const xIcon = document.getElementById('result-x-icon');
+
+                const code = input.value.replace(/\D/g, '');
+
+                if (!code) {
+                    showToast('لطفاً کد ملی را وارد کنید');
+                    return;
+                }
+
+                const validation = isValidNationalId(code);
+
+                result.classList.remove('success', 'error');
+                result.classList.add('show');
+
+                if (validation.valid) {
+                    result.classList.add('success');
+                    checkIcon.style.display = 'block';
+                    xIcon.style.display = 'none';
+                    resultStatus.textContent = 'کد ملی معتبر است';
+
+                    resultDetails.innerHTML = `
                     <div class="result-item">
                         <span class="result-item-label">کد ملی</span>
                         <span class="result-item-value">${code}</span>
@@ -1565,13 +1912,13 @@
                         <span class="result-item-value">${validation.provinceCode}</span>
                     </div>
                 `;
-            } else {
-                result.classList.add('error');
-                checkIcon.style.display = 'none';
-                xIcon.style.display = 'block';
-                resultStatus.textContent = 'کد ملی نامعتبر است';
+                } else {
+                    result.classList.add('error');
+                    checkIcon.style.display = 'none';
+                    xIcon.style.display = 'block';
+                    resultStatus.textContent = 'کد ملی نامعتبر است';
 
-                resultDetails.innerHTML = `
+                    resultDetails.innerHTML = `
                     <div class="result-item">
                         <span class="result-item-label">کد وارد شده</span>
                         <span class="result-item-value">${code}</span>
@@ -1581,106 +1928,107 @@
                         <span class="result-item-value">${validation.reason}</span>
                     </div>
                 `;
+                }
             }
-        }
 
-        // Generate button click
-        function generateNationalId() {
-            const select = document.getElementById('province-select');
-            const result = document.getElementById('generated-result');
-            const codeDisplay = document.getElementById('generated-code');
+            // Generate button click
+            function generateNationalId() {
+                const select = document.getElementById('province-select');
+                const result = document.getElementById('generated-result');
+                const codeDisplay = document.getElementById('generated-code');
 
-            const provinceCode = select.value || null;
-            const nationalId = generateRandomNationalId(provinceCode);
+                const provinceCode = select.value || null;
+                const nationalId = generateRandomNationalId(provinceCode);
 
-            codeDisplay.textContent = nationalId;
-            result.classList.add('show');
-        }
-
-        // Copy to clipboard
-        async function copyToClipboard() {
-            const code = document.getElementById('generated-code').textContent;
-
-            try {
-                await navigator.clipboard.writeText(code);
-                showToast('کپی شد!');
-            } catch (err) {
-                // Fallback
-                const textArea = document.createElement('textarea');
-                textArea.value = code;
-                document.body.appendChild(textArea);
-                textArea.select();
-                document.execCommand('copy');
-                document.body.removeChild(textArea);
-                showToast('کپی شد!');
+                codeDisplay.textContent = nationalId;
+                result.classList.add('show');
             }
-        }
 
-        // Toast notification
-        function showToast(message) {
-            const toast = document.getElementById('toast');
-            toast.textContent = message;
-            toast.classList.add('show');
+            // Copy to clipboard
+            async function copyToClipboard() {
+                const code = document.getElementById('generated-code').textContent;
 
-            setTimeout(() => {
-                toast.classList.remove('show');
-            }, 2000);
-        }
+                try {
+                    await navigator.clipboard.writeText(code);
+                    showToast('کپی شد!');
+                } catch (err) {
+                    // Fallback
+                    const textArea = document.createElement('textarea');
+                    textArea.value = code;
+                    document.body.appendChild(textArea);
+                    textArea.select();
+                    document.execCommand('copy');
+                    document.body.removeChild(textArea);
+                    showToast('کپی شد!');
+                }
+            }
 
-        // PWA Install
-        let deferredPrompt;
+            // Toast notification
+            function showToast(message) {
+                const toast = document.getElementById('toast');
+                toast.textContent = message;
+                toast.classList.add('show');
 
-        window.addEventListener('beforeinstallprompt', (e) => {
-            e.preventDefault();
-            deferredPrompt = e;
-            document.getElementById('install-banner').classList.add('show');
-        });
+                setTimeout(() => {
+                    toast.classList.remove('show');
+                }, 2000);
+            }
 
-        function installPWA() {
-            if (deferredPrompt) {
-                deferredPrompt.prompt();
-                deferredPrompt.userChoice.then((choiceResult) => {
-                    if (choiceResult.outcome === 'accepted') {
-                        showToast('اپلیکیشن نصب شد!');
-                    }
-                    deferredPrompt = null;
-                    document.getElementById('install-banner').classList.remove('show');
+            // PWA Install
+            let deferredPrompt;
+
+            window.addEventListener('beforeinstallprompt', (e) => {
+                e.preventDefault();
+                deferredPrompt = e;
+                document.getElementById('install-banner').classList.add('show');
+            });
+
+            function installPWA() {
+                if (deferredPrompt) {
+                    deferredPrompt.prompt();
+                    deferredPrompt.userChoice.then((choiceResult) => {
+                        if (choiceResult.outcome === 'accepted') {
+                            showToast('اپلیکیشن نصب شد!');
+                        }
+                        deferredPrompt = null;
+                        document.getElementById('install-banner').classList.remove('show');
+                    });
+                }
+            }
+
+            function dismissInstall() {
+                document.getElementById('install-banner').classList.remove('show');
+            }
+
+            // Input handling
+            document.getElementById('validate-input').addEventListener('input', function (e) {
+                this.value = this.value.replace(/\D/g, '').slice(0, 10);
+            });
+
+            document.getElementById('validate-input').addEventListener('keypress', function (e) {
+                if (e.key === 'Enter') {
+                    validateNationalId();
+                }
+            });
+
+            // Service Worker Registration
+            if ('serviceWorker' in navigator) {
+                window.addEventListener('load', () => {
+                    navigator.serviceWorker.register('sw.js')
+                        .then(registration => {
+                            console.log('SW registered:', registration);
+                        })
+                        .catch(error => {
+                            console.log('SW registration failed:', error);
+                        });
                 });
             }
-        }
 
-        function dismissInstall() {
-            document.getElementById('install-banner').classList.remove('show');
-        }
-
-        // Input handling
-        document.getElementById('validate-input').addEventListener('input', function(e) {
-            this.value = this.value.replace(/\D/g, '').slice(0, 10);
-        });
-
-        document.getElementById('validate-input').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                validateNationalId();
-            }
-        });
-
-        // Service Worker Registration
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('sw.js')
-                    .then(registration => {
-                        console.log('SW registered:', registration);
-                    })
-                    .catch(error => {
-                        console.log('SW registration failed:', error);
-                    });
+            // Initialize
+            document.addEventListener('DOMContentLoaded', () => {
+                initProvinceSelect();
             });
-        }
+        </script>
+    </body>
 
-        // Initialize
-        document.addEventListener('DOMContentLoaded', () => {
-            initProvinceSelect();
-        });
-    </script>
-</body>
 </html>
