@@ -184,10 +184,10 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 👨‍💻 Developer
 
-**Amir Hossein Pourjabar**
+**Amirhossein Hosseinpour**
 
 - Website: [amirhp.com/landing](https://amirhp.com/landing)
-- GitHub: [@amirhosseinHP](https://github.com/amirhp-com/)
+- GitHub: [@amirhp-com](https://github.com/amirhp-com/)
 
 ---
 
