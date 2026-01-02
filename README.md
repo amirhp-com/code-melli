@@ -1,6 +1,6 @@
-# 🇮🇷 Iranian National ID Validator & Generator
+<img src="icon.svg" width="90" align="left" />
 
-<div align="center">
+# 🇮🇷 Iranian National ID Validator & Generator
 
 ![Version](https://img.shields.io/badge/version-1.0.0-orange)
 ![License](https://img.shields.io/badge/license-MIT-blue)
@@ -10,8 +10,6 @@
 A beautiful, modern Progressive Web Application for validating and generating Iranian National ID numbers (کد ملی). Built with an Apple-inspired design aesthetic, featuring liquid glass effects and a dark orange theme.
 
 [**Live Demo**](https://code-melli.netlify.app) • [**Report Bug**](https://github.com/amirhp-com/code-melli) • [**Developer Website**](https://amirhp.com/landing)
-
-</div>
 
 ---
 
